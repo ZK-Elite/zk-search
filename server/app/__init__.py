@@ -1,8 +1,10 @@
+import os
 from flask import Flask, jsonify
 from app.controllers import initialize_resources
 from werkzeug.exceptions import HTTPException, default_exceptions
 
 app = Flask(__name__)
+os.environ['FLASK_ENV'] = 'development'
 
 @app.errorhandler(Exception)
 def handle_error(e):
