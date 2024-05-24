@@ -21,3 +21,9 @@ class DDGSearchService:
     def search_by_query(self, data) -> List[Dict[str, str]]:
         results = self.ddgs.text(**data)
         return results
+
+    @classmethod
+    @catch_exceptions
+    def get_keyword_suggestions(self, query) -> List[Dict[str, str]]:
+        results = self.ddgs.suggestions(query)
+        return results
