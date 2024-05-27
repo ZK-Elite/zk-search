@@ -15,9 +15,16 @@ def catch_exceptions(func):
 
 class DDGSearchService:
     ddgs = DDGS()
-
     @classmethod
     @catch_exceptions
     def search_by_query(self, data) -> List[Dict[str, str]]:
-        results = self.ddgs.text(**data)
+        results = self.ddgs.text(data["query"])
+        return results
+    @classmethod
+    def search_video(self, data) -> List[Dict[str, str]]:
+        results = self.ddgs.videos(data["query"])
+        return results
+    @classmethod
+    def search_image(self, data) -> List[Dict[str, str]]:
+        results = self.ddgs.images(data["query"])
         return results

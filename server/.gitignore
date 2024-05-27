@@ -267,3 +267,6 @@ dmypy.json
 .history
 
 # End of https://www.toptal.com/developers/gitignore/api/flask,visualstudiocode,python,emacs
+
+
+zkenv
