@@ -4,8 +4,8 @@ import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useSearchParams, useRouter, usePathname } from "next/navigation"; // Corrected import path
 import { Input } from "./ui/input";
-import axios from "axios";
 import { cn } from "../lib/utils";
+import { SuggestTypes } from "../data/search-types";
 
 interface SearchComponentProps {
   className?: string;
@@ -20,7 +20,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
   const dropdownRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState(searchParams.get("q") || "");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestTypes[]>([]);
   // search function
   const search = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,17 +59,23 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
   }, [dropdownRef]);
 
   // fetch suggestions
-
   const fetchSuggestions = async (input: string) => {
     try {
-      const response = await axios.post("/api/suggest", {
-        query: input
-      });
-      setSuggestions(response.data.data.slice(0, 4))
+      const response = await fetch(`/api/suggest?q=${input}`);
+
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      if (data) {
+        setSuggestions(data.data.slice(0, 4));
+      }
     } catch (error) {
-      console.error("Error fetching suggestions:", error);
+      console.error(`Error fetching suggestions: ${error}`);
     }
   };
+
   // handle suggestions function
   const handleSuggestionClick = (suggestion: string) => {
     setQuery(suggestion);
@@ -113,16 +119,16 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
               {open &&
                 <div className="flex flex-col top-full left-0 right-0 rounded-lg w-full">
                   {
-                    suggestions.length > 0 &&
+                    suggestions?.length > 0 &&
                     <div className="h-[1px] bg-[#27272A] mt-1"></div>
                   }
                   {
-                    <div className={`flex gap-3 flex-col ${suggestions.length > 0 && "py-4"}`}>
+                    <div className={`flex gap-3 flex-col ${suggestions?.length > 0 && "py-4"}`}>
                       {
-                        suggestions.map((suggestion, index) => (
+                        suggestions?.map((suggestion, index) => (
                           <div
                             key={index}
-                            onClick={() => handleSuggestionClick(suggestion)}
+                            onClick={() => handleSuggestionClick(suggestion.phrase)}
                             className='pl-3 py-2 cursor-pointer hover:bg-[#FFFFFF12] flex flex-row items-center justify-start rounded-md'
                           >
                             <Image
@@ -133,7 +139,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                               className='h-3.5 w-3.5 text-gray-500 mr-3'
                             />
                             <p className="text-white dark:text-black text-sm font-medium">
-                              {suggestion}
+                              {suggestion.phrase}
                             </p>
                           </div>
                         ))}
