@@ -65,7 +65,7 @@ const Header = () => {
                 className={`${activeBtn === item?.value
                   ? "border-b-2 border-[#38E5FF] text-[#38E5FF] dark:text-[#38E5FF]"
                   : "border-b-2 border-transparent text-white dark:text-black"
-                  } sm:text-lg gap-2 flex flex-row items-center pb-3`}
+                  } sm:text-lg gap-2 flex flex-row items-center pb-3 z-[-1]`}
                 key={item?.value}
                 onClick={() => setActiveBtn(item?.value)}
               >
