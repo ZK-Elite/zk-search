@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -38,11 +40,8 @@
     "react-dom": "^18",
     "react-hot-toast": "^2.4.1",
     "react-use": "^17.5.0",
-    "serpapi": "^2.0.0",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "viem": "^2.7.15",
-    "wagmi": "^2.5.7",
     "workbox-webpack-plugin": "^7.1.0"
   },
   "devDependencies": {
