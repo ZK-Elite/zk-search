@@ -4,7 +4,6 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
@@ -66,13 +65,8 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Providers>
-            <div
-              className="dark:bg-[#E5FCFF] bg-[#00111A]"
-              style={{
-                minHeight: "100vh",
-              }}
-            >
+          <ThemeProvider defaultTheme="dark" enableSystem>
+            <div className="bg-[#00111A] dark:bg-[#E5FCFF] h-screen">
               <Suspense>
                 <Header />
                 {children}
@@ -83,9 +77,9 @@ export default function RootLayout({
               position="top-center"
               containerStyle={{ backgroundColor: "#black" }}
             />
-          </Providers>
+          </ThemeProvider>
         </ThemeProvider>
       </body>
-    </html >
+    </html>
   );
 }
