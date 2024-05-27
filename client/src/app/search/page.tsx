@@ -1,6 +1,14 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+} from "../../components/ui/carousel"
+import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import Summary from "../../components/summary";
 import RelevantLinks from "../../components/relevantlinks";
@@ -10,20 +18,10 @@ import { ScrollArea } from "../../components/ui/scroll-area";
 import { Skeleton } from "../../components/ui/skeleton";
 import AdsCard from "../../components/AdsCard";
 import { Adtype } from "../../data/types";
-import Image from "next/image";
-import logoImg from "../../../public/logo.svg";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-} from "../../components/ui/carousel"
-import { ChevronRight } from "lucide-react";
-import ImageCard from "@/src/components/image";
-import { sampleSuggests } from "@/src/data/contant";
-import { ImageTypes, NewsTypes, QueryTypes, SuggestTypes, VideoTypes } from "@/src/data/search-types";
 import NewsCard from "@/src/components/news";
-
+import logoImg from "../../../public/logo.svg";
+import ImageCard from "@/src/components/image";
+import { ImageTypes, NewsTypes, QueryTypes, SuggestTypes, VideoTypes } from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -33,7 +31,8 @@ export default function Page() {
   const [imageResult, setImageResult] = useState<ImageTypes[]>();
   const [videoResult, setVideoResult] = useState<VideoTypes[]>();
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
-  // const [veniceResult, setVeniceResult] = useState<string>();
+  const [veniceResult, setVeniceResult] = useState<string>();
+  const [veniceUrlResult, setVeniceUrlResult] = useState<[]>();
   const [loading, setLoading] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
 
@@ -60,10 +59,6 @@ export default function Page() {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }),
-        // fetchData(`api/suggestion?q=${(query ?? "")}`, {
-        //   method: "GET",
-        //   headers: { "Content-Type": "application/json" },
-        // }),
         fetchData("/api/image", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -86,26 +81,26 @@ export default function Page() {
             keywords: query,
           }),
         }),
-        // fetchData("/api/venice", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ query }),
-        // }),
+        fetchData(`/api/venice?q=${query}`, {
+          method: "GET",
+          headers: { "Content-Type": "application/json" },
+        }),
         fetchData("/api/ads/fetch", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }),
       ];
 
-      const [queryData, suggestionData, imageData, videoData, newsData, adData] = await Promise.all(apiCalls);
-      console.log(imageData)
+      const [queryData, suggestionData, imageData, videoData, newsData, veniceData, adData] = await Promise.all(apiCalls);
 
+      const hrefArray = queryData.data?.map((item: any) => item.href);
+      setVeniceUrlResult(hrefArray);
       setQueryResult(queryData.data);
       setSuggest(suggestionData.data);
       setImageResult(imageData.data);
       setVideoResult(videoData.data);
       setNewsResult(newsData.data);
-      // setVeniceResult(veniceData.data);
+      setVeniceResult(veniceData.data);
       setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -119,6 +114,8 @@ export default function Page() {
       loadData();
     }
   }, [loadData, query]);
+
+  const hrefArray = queryResult?.map(item => item.href)
 
   return (
     <>
@@ -280,12 +277,12 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  {/* {(
+                  {veniceResult && queryResult && (
                     <Summary
                       description={veniceResult}
-                      urls={Array.isArray(result?.items) ? result.items : []}
+                      urls={veniceUrlResult ?? []}
                     />
-                  )} */}
+                  )}
                 </>
               )
               }

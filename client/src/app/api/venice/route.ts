@@ -1,46 +1,47 @@
 import { NextResponse } from 'next/server';
-import axios from 'axios';
 
-export async function POST(req: Request) {
+export async function GET(req: Request): Promise<Response> {
     try {
-        const json = await req.json();
-        const { query } = json;
-        // Call Venice API directly within the POST handler
-        const date = new Date();
-        const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '');
-        const veniceResponse = await axios.post(
-            "https://venice.ai/api/inference/chat",
-            {
-                prompt: [
-                    {
-                        content: query,
-                        role: "user"
-                    }
-                ],
-                systemPrompt: "",
-                conversationType: "text",
-                seed: formattedDate,
-                modelId: "hermes-2-theta"
-            },
-            {
-                headers: {
-                    'accept': "application/json",
-                    'content-type': "application/json",
-                },
-            }
-        );
+        // Parse query parameters from the request URL
+        const url = new URL(req.url);
+        const q = url.searchParams.get('q');
 
-        if (veniceResponse.status !== 200) {
-            throw new Error(`Venice API request failed with status ${veniceResponse.status}`);
+        if (!q) {
+            throw new Error("Query parameter 'q' is required");
         }
-        const veniceData = veniceResponse.data;
+
+        const base_url = `${process.env.DUCKDUCKGO_SEARCH_BACKEND_PORT}/api/search/chat`;
+
+        const params = new URLSearchParams({ q: q });
+
+        const fullUrl = `${base_url}?${params.toString()}`;
+
+        const suggestionResponse = await fetch(fullUrl);
+
+        if (!suggestionResponse.ok) {
+            throw new Error(`Error: ${suggestionResponse.status}\n${suggestionResponse.statusText}`);
+        }
+
+        const responseText = await suggestionResponse.text();
+        if (!responseText) {
+            throw new Error('Received empty response from the server');
+        }
+
+        let results;
+        try {
+            results = JSON.parse(responseText);
+        } catch (error) {
+            throw new Error('Failed to parse JSON response: ' + error);
+        }
+
         return NextResponse.json(
-            { status: 200, headers: { 'Content-Type': 'application/json' }, data: veniceData }
+            { data: results },
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
-        console.error('Error proxying request to Venice API:', error);
+        console.error('Error fetching Venice ai chat :', error);
         return NextResponse.json(
-            { error: error },
+            { error: (error as Error).message },
             { status: 500 }
         );
     }

@@ -24,7 +24,6 @@ const VideoCard: React.FC<VideoCardProps> = ({ content, description, src, durati
   const handleImgError = () => {
     setError(true);
   };
-  console.log()
 
   return (
     <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-3 items-stretch h-full justify-between gap-2">

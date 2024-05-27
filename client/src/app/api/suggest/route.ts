@@ -17,7 +17,6 @@ export async function GET(req: Request): Promise<Response> {
         const fullUrl = `${base_url}?${params.toString()}`;
 
         const suggestionResponse = await fetch(fullUrl);
-        console.log(suggestionResponse)
 
         if (!suggestionResponse.ok) {
             throw new Error(`Error: ${suggestionResponse.status}\n${suggestionResponse.statusText}`);
