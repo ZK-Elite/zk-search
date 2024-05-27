@@ -1,0 +1,26 @@
+name: Zksearch Backend
+on:
+  push:
+    branches: ["main"]
+
+defaults:
+  run:
+    working-directory: ./server
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    strategy:
+      matrix:
+        node-version: [20.0.0]
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd ~/actions-runner/_work/epsilon-dapp/epsilon-dapp/bot
+          pip install -r requirements.txt
