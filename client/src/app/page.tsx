@@ -14,7 +14,7 @@ export default function Home() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="absolute -translate-y-[11vh] max-sm:-translate-y-[9.6vh] max-lg:-translate-y-[7vh] max-[1025px]:-translate-y-[6vh] flex flex-col justify-center items-center">
+        <div className="h-full mb-[165px] flex flex-col justify-center items-center">
           <div className="p-3 mb-8 dark:backdrop-blur-2xl dark:rounded-xl dark:bg-[#FFFFFF66] w-44 aspect-[12/9] flex justify-center items-center">
             <Image
               className="m-auto object-cover"
