@@ -15,23 +15,23 @@ export default function ThemeButton() {
                     isClient && (
                         <button className="cursor-pointer" onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")}>
                             <div className="relative flex items-center mx-2 border-gray-500 border-2 rounded-full">
-                                <div className="w-16 h-7 bg-transparent rounded-full z-20 flex flex-row justify-between px-1 items-center">
+                                <div className="w-16 h-7 bg-transparent rounded-full z-20 flex flex-row justify-between px-1.5 items-center">
                                     <Image
                                         src={"images/icons/moon.svg"}
-                                        width={20}
-                                        height={20}
-                                        alt="sun"
-                                        className="w-5 h-5 lg:w-5 lg:h-5"
+                                        width={16}
+                                        height={16}
+                                        alt="moon"
+                                        className="w-4 h-4"
                                         style={{
                                             filter: theme === "dark" ? "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)" : "brightness(0)"
                                         }}
                                     />
                                     <Image
                                         src={"images/icons/sun.svg"}
-                                        width={20}
-                                        height={20}
+                                        width={16}
+                                        height={16}
                                         alt="sun"
-                                        className="w-5 h-5 lg:w-5 lg:h-5"
+                                        className="w-4 h-4"
                                         style={{
                                             filter: theme === "dark" ? "brightness(0) invert(1)" : "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)"
                                         }}
