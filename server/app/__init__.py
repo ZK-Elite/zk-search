@@ -4,8 +4,10 @@ from app.controllers import initialize_resources
 from werkzeug.exceptions import HTTPException, default_exceptions
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 os.environ['FLASK_ENV'] = 'development'
 
 # Initialize Flask-Limiter
