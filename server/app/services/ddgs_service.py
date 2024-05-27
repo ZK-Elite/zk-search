@@ -22,11 +22,13 @@ class DDGSearchService:
         return results
     
     @classmethod
+    @catch_exceptions
     def search_video(self, data) -> List[Dict[str, str]]:
         results = self.ddgs.videos(data["query"])
         return results
     
     @classmethod
+    @catch_exceptions
     def search_image(self, data) -> List[Dict[str, str]]:
         results = self.ddgs.images(data["query"])
         return results
