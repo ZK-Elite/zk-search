@@ -173,7 +173,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-zkenv/
 
 # Spyder project settings
 .spyderproject
