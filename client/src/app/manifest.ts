@@ -4,26 +4,91 @@ export default function manifest(): MetadataRoute.Manifest {
     return {
         name: 'zkml-search',
         short_name: 'zkml',
-        description: '',
+        description: 'zkSearch is a privacy-centric search engine crafted within the ZKML ecosystem, utilising established privacy-focused technologies while refraining from storing user data. It harnesses the power of venice ai and groq to deliver AI-driven search capabilities within the secure confines of the ZKML subnet, ensuring heightened levels of privacy and security.',
         start_url: '/',
         display: 'standalone',
         orientation: 'portrait',
-         //Mock Data->
         icons: [
             {
-                src: '/og.png', 
-                sizes: '192x192',
+                src: '/twitter-x.png', 
+                sizes: '',
                 type: 'image/png',
+                purpose: 'any'
+            }, 
+            {
+                src: '/zwap-2d.png', 
+                sizes: '',
+                type: 'image/png',
+                purpose: 'any'
+            }, 
+            {
+                src: '/placeholder-image.png', 
+                sizes: '',
+                type: 'image/png',
+                purpose: 'any'
+            }, 
+            {
+                src: '/user.png', 
+                sizes: '',
+                type: 'image/png',
+                purpose: 'any'
+            }, 
+            {
+                src: '/video.png', 
+                sizes: '',
+                type: 'image/png',
+                purpose: 'any'
+            }, 
+            {
+                src: '/logo.svg', 
+                sizes: 'any', 
+                type: 'image/svg+xml',
                 purpose: 'any'
             },
             {
-                src: '/og.png', 
-                sizes: '512x512',
-                type: 'image/png',
-                purpose: 'maskable'
-            }
+                src: '/search-normal.svg', 
+                sizes: 'any', 
+                type: 'image/svg+xml',
+                purpose: 'any'
+            },
+            {
+                src: '/search-blue.svg', 
+                sizes: 'any',  
+                type: 'image/svg+xml', 
+                purpose: 'any'
+            },
+            {
+                src: '/image.svg', 
+                sizes: 'any', 
+                type: 'image/svg+xml',
+                purpose: 'any'
+            },
+            {
+                src: '/moon.svg', 
+                sizes: 'any',
+                type: 'image/svg+xml', 
+                purpose: 'any'
+            },
+            {
+                src: '/news.svg', 
+                sizes: 'any', 
+                type: 'image/svg+xml', 
+                purpose: 'any'
+            },
+            {
+                src: '/sun.svg', 
+                sizes: 'any', 
+                type: 'image/svg+xml', 
+                purpose: 'any'
+            },
+            {
+                src: '/telegram-out.svg', 
+                sizes: 'any', 
+                type: 'image/svg+xml', 
+                purpose: 'any'
+            },
         ],
-        background_color: '#ffffff',
-        theme_color: '#3367D6' 
+        background_color: '#00111A',
+        theme_color: '#FFFFFF' 
     };
 }
