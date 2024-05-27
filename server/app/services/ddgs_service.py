@@ -47,6 +47,12 @@ class DDGSearchService:
         results = self.ddgs.news(**data)
         return results
     
+    @classmethod
+    @catch_exceptions
+    def search_summary_by_query(self, data) -> List[Dict[str, str]]:
+        results = self.ddgs.chat(**data)
+        return results
+    
     # @classmethod
     # @catch_exceptions
     # def chat_by_query(self, query) -> str:
