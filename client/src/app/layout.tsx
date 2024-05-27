@@ -4,14 +4,13 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import "@rainbow-me/rainbowkit/styles.css";
 import { Providers } from "./providers";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 const inter = Inter({ subsets: ["latin"] });
 const title = "zKSearch";
 const description =
-  "zkSearch is a privacy-centric search engine crafted within the ZKML ecosystem, utilising established privacy-focused technologies while refraining from storing user data. It harnesses the power of Bittensor to deliver AI-driven search capabilities within the secure confines of the ZKML subnet, ensuring heightened levels of privacy and security.";
+  "zkSearch is a privacy-centric search engine crafted within the ZKML ecosystem, utilising established privacy-focused technologies while refraining from storing user data. It harnesses the power of venice ai and groq to deliver AI-driven search capabilities within the secure confines of the ZKML subnet, ensuring heightened levels of privacy and security.";
 const domain = process.env.DOMAIN || "";
 
 export const metadata: Metadata = {

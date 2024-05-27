@@ -13,6 +13,7 @@ class DDGSVideo(Resource):
         data: dict = request.get_json()
         search_result = DDGSearchService.search_video(data)
         return search_result, 200
+    
 class DDGSImage(Resource):
     def post(self):
         data: dict = request.get_json()

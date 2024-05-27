@@ -23,7 +23,7 @@ const Header = () => {
       className={`fixed px-5 w-full z-40 ${pathname === "/search" && "backdrop-blur"
         }`}
     >
-      <div className="flex w-full md:px-4 pt-8 pb-5 items-end">
+      <div className="flex w-full md:px-4 pt-6 pb-4 items-end">
         {pathname === "/search" && (
           <div className="flex sm:flex-row flex-col w-full gap-3">
             <div className="flex items-center justify-start md:w-20 w-full">
@@ -73,7 +73,7 @@ const Header = () => {
                   src={item.src}
                   width={20}
                   height={20}
-                  className={`h-full w-full ${activeBtn === item.value ? "none" : "brightness-0 invert dark:brightness-0 dark:invert-0"}`}
+                  className={`h-full w-full z-[-1] ${activeBtn === item.value ? "none" : "brightness-0 invert dark:brightness-0 dark:invert-0"}`}
                   style={{
                     width: "auto",
                     height: "auto",

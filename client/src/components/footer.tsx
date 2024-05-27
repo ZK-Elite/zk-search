@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import logoImg from "../../public/logo.svg";
 import { useTheme } from "next-themes";
+import logoImg from "../../public/logo.svg";
 
 const Footer = () => {
   const pathname = usePathname();
@@ -18,7 +18,7 @@ const Footer = () => {
     >
       {
         isClient && (
-          <div className={`mx-auto sm:flex hidden flex-row w-full items-center border-t border-[#7E7E7E] ${pathname === "/search" ? "py-4" : "py-8"}`}>
+          <div className={`mx-auto sm:flex hidden flex-row w-full items-center border-t border-[#7E7E7E] ${pathname === "/search" ? "py-3" : "py-6"}`}>
             <a
               href="https://www.zkml.systems/"
               rel="noopener noreferrer"
@@ -28,7 +28,7 @@ const Footer = () => {
                 width={32}
                 height={32}
                 src={logoImg}
-                className="footerImg ml-4"
+                className="footerImg ml-2"
                 alt="logoimg"
                 priority
                 style={{
@@ -37,11 +37,26 @@ const Footer = () => {
                 }}
               />
             </a>
-
             <a href="https://www.zkml.systems/" rel="noopener noreferrer">
               <p className="mx-2 text-white dark:text-black">ZKML</p>
             </a>
-
+            <div className="pl-10">
+              <a href="https://www.zkml.systems/"
+                rel="noopener noreferrer">
+                <Image
+                  width={32}
+                  height={32}
+                  src={"images/icons/zwap-2d.svg"}
+                  className="footerImg ml-2"
+                  alt="logoimg"
+                  priority
+                  style={{
+                    width: "32px",
+                    height: 'auto'
+                  }}
+                />
+              </a>
+            </div>
             <div className="ml-auto flex">
               <a
                 href="https://zkml.gitbook.io/doc/introduction"
@@ -49,8 +64,7 @@ const Footer = () => {
               >
                 Privacy Policy
               </a>
-
-              <p className="mx-4 text-sm text-white dark:text-black">{"|"}</p>
+              <p className="mx-4 text-sm text-[#FFFFFF33] dark:text-black">{"|"}</p>
               <a href="https://twitter.com/ZKMLsystems" rel="noopener noreferrer">
                 <Image
                   src={"images/icons/twitter-x.svg"}
@@ -63,14 +77,14 @@ const Footer = () => {
                   }}
                 />
               </a>
-              <p className="mx-4 text-sm text-white dark:text-black">{"|"}</p>
+              <p className="mx-4 text-sm text-[#FFFFFF33] dark:text-black">{"|"}</p>
               <a href="https://t.me/zkmlsystems" rel="noopener noreferrer">
                 <Image
                   width={20}
                   height={20}
                   src={"images/icons/telegram-out.svg"}
                   alt="telegram"
-                  className="telegramIcon mr-4"
+                  className="telegramIcon mr-2"
                   style={{
                     filter: theme === "dark" ? "brightness(0)" : "brightness(0) invert(1)"
                   }}
