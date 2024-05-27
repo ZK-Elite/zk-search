@@ -23,7 +23,7 @@ const Header = () => {
       className={`fixed px-5 w-full z-40 ${pathname === "/search" && "backdrop-blur"
         }`}
     >
-      <div className="flex w-full md:px-4 pt-8 pb-5 items-end">
+      <div className="flex w-full md:px-4 pt-6 pb-4 items-end">
         {pathname === "/search" && (
           <div className="flex sm:flex-row flex-col w-full gap-3">
             <div className="flex items-center justify-start md:w-20 w-full">
@@ -65,7 +65,7 @@ const Header = () => {
                 className={`${activeBtn === item?.value
                   ? "border-b-2 border-[#38E5FF] text-[#38E5FF] dark:text-[#38E5FF]"
                   : "border-b-2 border-transparent text-white dark:text-black"
-                  } sm:text-lg gap-2 flex flex-row items-center pb-3 z-[-1]`}
+                  } sm:text-lg gap-2 flex flex-row items-center pb-3`}
                 key={item?.value}
                 onClick={() => setActiveBtn(item?.value)}
               >
@@ -73,7 +73,7 @@ const Header = () => {
                   src={item.src}
                   width={20}
                   height={20}
-                  className={`h-full w-full ${activeBtn === item.value ? "none" : "brightness-0 invert dark:brightness-0 dark:invert-0"}`}
+                  className={`h-full w-full z-[-1] ${activeBtn === item.value ? "none" : "brightness-0 invert dark:brightness-0 dark:invert-0"}`}
                   style={{
                     width: "auto",
                     height: "auto",
