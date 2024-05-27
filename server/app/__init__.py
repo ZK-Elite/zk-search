@@ -2,9 +2,18 @@ import os
 from flask import Flask, jsonify
 from app.controllers import initialize_resources
 from werkzeug.exceptions import HTTPException, default_exceptions
+from flask_limiter import Limiter
+from flask_limiter.util import get_remote_address
 
 app = Flask(__name__)
 os.environ['FLASK_ENV'] = 'development'
+
+# Initialize Flask-Limiter
+limiter = Limiter(
+    get_remote_address,
+    app=app,
+    default_limits=["50 per second"]
+)
 
 @app.errorhandler(Exception)
 def handle_error(e):

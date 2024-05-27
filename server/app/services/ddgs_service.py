@@ -9,7 +9,6 @@ def catch_exceptions(func):
             return func(*args, **kwargs)
         except Exception as e:
             # Handle the exception here
-            print(f"{e}")
             return None
     return wrapper
 
@@ -26,4 +25,28 @@ class DDGSearchService:
     @catch_exceptions
     def get_keyword_suggestions(self, query) -> List[Dict[str, str]]:
         results = self.ddgs.suggestions(query)
+        return results
+    
+    @classmethod
+    @catch_exceptions
+    def search_images_by_query(self, data) -> List[Dict[str, str]]:
+        results = self.ddgs.images(**data)
+        return results
+
+    @classmethod
+    @catch_exceptions
+    def search_videos_by_query(self, data) -> List[Dict[str, str]]:
+        results = self.ddgs.videos(**data)
+        return results
+    
+    @classmethod
+    @catch_exceptions
+    def search_news_by_query(self, data) -> List[Dict[str, str]]:
+        results = self.ddgs.news(**data)
+        return results
+    
+    @classmethod
+    @catch_exceptions
+    def chat_by_query(self, query) -> str:
+        results = self.ddgs.chat(query)
         return results
