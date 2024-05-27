@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <main
-        className="w-screen h-screen relative flex items-center bg-[#00111A] dark:bg-[#CBF8FF] justify-center"
+        className="relative flex justify-center items-center bg-[#00111A] dark:bg-[#CBF8FF] w-screen h-screen"
         style={{
           backgroundImage: "url('images/bg/bg-block.svg')",
           backgroundPosition: "center",
@@ -14,8 +14,8 @@ export default function Home() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        <div className="absolute -translate-y-[8.5vh] flex flex-col justify-center items-center">
-          <div className="p-3 mb-8 dark:backdrop-blur-2xl dark:rounded-xl dark:bg-[#FFFFFF66] w-44 aspect-[12/9] flex justify-center items-center">
+        <div className="absolute flex flex-col justify-center items-center -translate-y-[38%]">
+          <div className="flex justify-center items-center dark:bg-[#FFFFFF66] dark:backdrop-blur-2xl mb-8 p-3 dark:rounded-xl w-44 aspect-[12/9]">
             <Image
               className="m-auto object-cover"
               width="75"
