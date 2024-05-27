@@ -6,6 +6,7 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
+
 const inter = Inter({ subsets: ["latin"] });
 const title = "zKSearch";
 const description =
@@ -65,19 +66,17 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ThemeProvider defaultTheme="dark" enableSystem>
-            <div className="bg-[#00111A] dark:bg-[#E5FCFF] h-screen">
-              <Suspense>
-                <Header />
-                {children}
-                <Footer />
-              </Suspense>
-            </div>
-            <Toaster
-              position="top-center"
-              containerStyle={{ backgroundColor: "#black" }}
-            />
-          </ThemeProvider>
+          <div className="bg-[#00111A] dark:bg-[#E5FCFF] h-screen">
+            <Suspense>
+              <Header />
+              {children}
+              <Footer />
+            </Suspense>
+          </div>
+          <Toaster
+            position="top-center"
+            containerStyle={{ backgroundColor: "#black" }}
+          />
         </ThemeProvider>
       </body>
     </html>
