@@ -5,31 +5,29 @@ import logoImg from "../../public/logo.svg";
 export default function Home() {
   return (
     <>
-      <div
-        className="flex items-center bg-[#00111A] dark:bg-[#CBF8FF] justify-center"
+      <main
+        className="w-screen h-screen relative flex items-center bg-[#00111A] dark:bg-[#CBF8FF] justify-center"
         style={{
-          backgroundImage: "url(images/bg/bg-dark.png)",
+          backgroundImage: "url('images/bg/bg-block.svg')",
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
         }}
       >
-        <main className="flex flex-col items-center 2xl:pt-[20rem] xl:pt-[17.2rem] lg:pt-[17.2rem] md:pt-[17.2rem] pt-[17.2rem]  h-screen">
-          <div className="flex flex-col items-center w-full">
-            <div className="dark:bg-[#FFFFFF66] p-3 mb-8 dark:backdrop-blur-[35px] dark:rounded-[14px] dark:border-2 dark:border-[#38E5FF]">
-              <Image
-                className="m-auto object-cover"
-                width="75"
-                height="25"
-                src={logoImg}
-                alt="logo"
-                priority
-              />
-            </div>
-            <SearchBox />
+        <div className="absolute -translate-y-[7vh] flex flex-col justify-center">
+          <div className="p-3 mb-8 dark:backdrop-blur-2xl dark:rounded-xl dark:bg-[#FFFFFF66]">
+            <Image
+              className="m-auto object-cover"
+              width="75"
+              height="25"
+              src={logoImg}
+              alt="logo"
+              priority
+            />
           </div>
-        </main>
-      </div>
+          <SearchBox />
+        </div>
+      </main>
     </>
   );
 }
