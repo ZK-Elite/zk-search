@@ -81,10 +81,11 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
 
   return (
     <>
-      <>
+      <div className="relative w-full">
+        <div className="absolute -inset-x-4 -inset-y-6 bg-gradient-to-r from-[#38E5FF80] to-[#38E5FF80] rounded-xl blur-2xl opacity-50 " />
         <div
           className={cn(
-            `flex flex-col justify-center w-full items-center rounded-[14px] bg-[#121e22e0] px-5 py-1 md:w-[552px] ${
+            `relative flex flex-col justify-center w-full items-center rounded-[14px] bg-[#121e22e0] px-5 py-1 md:w-[552px] ${
               pathname === "/"
                 ? "border-2 border-[#38E5FF] dark:bg-[#cbf8ffbd]"
                 : "border border-[#27272A] dark:bg-[#d3e8eb] "
@@ -108,6 +109,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                   alt="Search Icon"
                   className="h-5 w-5 text-gray-500 mr-3"
                 />
+
                 <Input
                   ref={searchInputRef}
                   value={query}
@@ -117,6 +119,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                   className="text-white dark:text-black text-base mb-8 m-auto bg-transparent focus:outline-none focus:border-none border-none focus:ring-none hover:bg-transparent outline-none"
                 />
               </div>
+
               {open && (
                 <div className="absolute bg-[#121e22e0] flex flex-col top-full left-0 right-0 rounded-lg w-full">
                   {suggestions.length > 0 && (
@@ -153,7 +156,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
             </form>
           </div>
         </div>
-      </>
+      </div>
     </>
   );
 };

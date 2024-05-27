@@ -21,8 +21,8 @@
 }
 
 @font-face {
-  font-family: 'Satoshi-Variable';
-  src: url('../../public/font/Satoshi-Black.woff') format('woff');
+  font-family: "Satoshi-Variable";
+  src: url("../../public/font/Satoshi-Black.woff") format("woff");
   font-weight: 200;
   /* Adjust as needed based on the font weights available */
 }
@@ -30,9 +30,12 @@
 body {
   font-family: "Satoshi-Variable", sans-serif;
   color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+      to bottom,
       transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
 }
 
 @layer utilities {
@@ -196,7 +199,6 @@ header {
   /* Turquoise color */
 }
 
-
 /* If you're using Tailwind CSS, add these classes to your styles */
 .truncate {
   overflow: hidden;
@@ -252,7 +254,6 @@ header {
 }
 
 @keyframes dot-carousel-loader {
-
   0%,
   80%,
   100% {
