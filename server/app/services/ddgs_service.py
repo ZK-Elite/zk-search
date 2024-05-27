@@ -57,7 +57,6 @@ class DDGSearchService:
     @catch_exceptions
     def chat_by_query(self, query) -> str:
         try:
-            print(query)
             if not query:
                 return None
 
