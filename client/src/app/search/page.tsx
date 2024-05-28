@@ -22,7 +22,8 @@ import NewsCard from "@/src/components/news";
 import logoImg from "../../../public/logo.svg";
 import ImageCard from "@/src/components/image";
 import { ImageTypes, NewsTypes, QueryTypes, VideoTypes } from "@/src/data/search-types";
-
+import { LiaSearchPlusSolid } from "react-icons/lia";
+import noresult from '../../../public/images/icons/noresult.svg'
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
@@ -164,64 +165,99 @@ export default function Page() {
 
                   <div className="mt-8">
                     <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">Videos</p>
-                    <Carousel>
-                      <CarouselContent>
-                        {videoResult && videoResult.map((video, index) => {
-                          return (
-                            video.image_token && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <VideoCard
-                                  content={video.content}
-                                  description={video.description}
-                                  duration={video.duration}
-                                  src={video.images.large}
-                                  title={video.title}
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
-                      </CarouselContent>
-                      <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
-                    </Carousel>
-                    <div className="w-full flex justify-center items-center mt-3">
-                      <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
-                        More Videos
-                        <ChevronRight className="h-6 w-6" />
-                      </button>
-                    </div>
+                    {
+                      videoResult ? (<><Carousel>
+                        <CarouselContent>
+                          {videoResult && videoResult.map((video, index) => {
+                            return (
+                              video.image_token && (
+                                <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
+                                  <VideoCard
+                                    content={video.content}
+                                    description={video.description}
+                                    duration={video.duration}
+                                    src={video.images.large}
+                                    title={video.title}
+                                  />
+                                </CarouselItem>
+                              )
+                            );
+                          })}
+                        </CarouselContent>
+                        <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
+                      </Carousel>
+                        <div className="w-full flex justify-center items-center mt-3">
+                          <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
+                            More Videos
+                            <ChevronRight className="h-6 w-6" />
+                          </button>
+                        </div></>) : (<div className="flex justify-center items-center text-white dark:text-black md:h-[150px]">
+                        <div>
+                          <div className="flex justify-center">
+                            <Image
+                              width={32}
+                              height={32}
+                              className="flex items-center p-1 justify-center"
+                              src={noresult}
+                              alt="LOGO"
+                              priority
+                            />
+                          </div>
+                          no result found
+                        </div>
+                      </div>)
+                    }
+
                   </div>
 
                   {/* ---------------- News ---------------- */}
 
                   <div className="mt-8">
                     <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">News</p>
-                    <Carousel>
-                      <CarouselContent>
-                        {newsResult && newsResult.map((news, index) => {
-                          return (
-                            news.title && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <NewsCard
-                                  newsUrl={news.url}
-                                  title={news.title}
-                                  image={news.image}
-                                  date={news.date}
-                                  source={news.source}
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
-                      </CarouselContent>
-                      <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
-                    </Carousel>
-                    <div className="w-full flex justify-center items-center mt-3">
-                      <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
-                        More News
-                        <ChevronRight className="h-6 w-6" />
-                      </button>
-                    </div>
+                    {
+                      newsResult ? (<>
+                        <Carousel>
+                          <CarouselContent>
+                            {newsResult && newsResult.map((news, index) => {
+                              return (
+                                news.title && (
+                                  <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
+                                    <NewsCard
+                                      newsUrl={news.url}
+                                      title={news.title}
+                                      image={news.image}
+                                      date={news.date}
+                                      source={news.source}
+                                    />
+                                  </CarouselItem>
+                                )
+                              );
+                            })}
+                          </CarouselContent>
+                          <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
+                        </Carousel>
+                        <div className="w-full flex justify-center items-center mt-3">
+                          <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
+                            More News
+                            <ChevronRight className="h-6 w-6" />
+                          </button>
+                        </div>
+                      </>) : (<div className="flex justify-center items-center text-white dark:text-black md:h-[150px]">
+                        <div>
+                          <div className="flex justify-center">
+                            <Image
+                              width={32}
+                              height={32}
+                              className="flex items-center p-1 justify-center"
+                              src={noresult}
+                              alt="LOGO"
+                              priority
+                            />
+                          </div>
+                          no result found
+                        </div>
+                      </div>)
+                    }
                   </div>
 
                   {/* --------------- relevant links --------------- */}
@@ -323,11 +359,28 @@ export default function Page() {
                             );
                           })}
                         </div>
+
                         <div className="w-full flex justify-center items-center mt-3">
-                          <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
-                            More Images
-                            <ChevronRight className="h-6 w-6" />
-                          </button>
+                          {
+                            imageResult ? (<button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
+                              More Images
+                              <ChevronRight className="h-6 w-6" />
+                            </button>) : (<div className="flex justify-center items-center text-white dark:text-black md:h-[150px]">
+                        <div>
+                          <div className="flex justify-center">
+                            <Image
+                              width={32}
+                              height={32}
+                              className="flex items-center p-1 justify-center"
+                              src={noresult}
+                              alt="LOGO"
+                              priority
+                            />
+                          </div>
+                          no result found
+                        </div>
+                      </div>)
+                          }
                         </div>
                       </div>
                     </>
