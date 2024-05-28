@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNext,
 } from "../../components/ui/carousel"
+import Tile from "@/src/components/ui/tile";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -125,6 +126,13 @@ export default function Page() {
       loadData();
     }
   }, [loadData, query]);
+  const videoRefs = useRef<HTMLDivElement[]>([]);
+  const [maxHeight, setMaxHeight] = useState(0);
+  useEffect(() => {
+    // Calculate the maximum height after all components are rendered
+    const heights = videoRefs.current.map(ref => ref ? ref.offsetHeight : 0);
+    setMaxHeight(Math.max(...heights));
+  }, [videoResult]);
   return (
     <>
       <div className={`flex flex-col items-center md:space-auto space-y-2 ${loading && !queryResult ? 'h-screen' : ''}`}>
@@ -151,25 +159,22 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  {/* --------------- relevant links --------------- */}
-
-                  {/* {queryResult && (
-                    <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
-                      <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Results</p>
-                      <RelevantLinks links={queryResult.slice(0, 10)} />
-                    </ScrollArea>
-                  )} */}
 
                   {/* ---------------- video ---------------- */}
 
                   <div className="mt-8">
                     <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">Videos</p>
-                    <Carousel>
-                      <CarouselContent>
-                        {videoResult && videoResult.map((video, index) => {
-                          return (
-                            video.image_token && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
+                    <Tile>
+                      {videoResult && videoResult.map((video, index) => {
+                        return (
+                          video.image_token && (
+                            <>
+                              <div
+                                ref={el => {
+                                  if (el) videoRefs.current[index] = el;
+                                }}
+                                style={{ height: maxHeight }}
+                              >
                                 <VideoCard
                                   content={video.content}
                                   description={video.description}
@@ -177,61 +182,13 @@ export default function Page() {
                                   src={video.images.large}
                                   title={video.title}
                                 />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
-                      </CarouselContent>
-                      <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
-                    </Carousel>
-                    <div className="w-full flex justify-center items-center mt-3">
-                      <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
-                        More Videos
-                        <ChevronRight className="h-6 w-6" />
-                      </button>
-                    </div>
+                              </div>
+                            </>
+                          )
+                        );
+                      })}
+                    </Tile>
                   </div>
-
-                  {/* ---------------- News ---------------- */}
-
-                  {/* <div className="mt-8">
-                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">News</p>
-                    <Carousel>
-                      <CarouselContent>
-                        {newsResult && newsResult.map((news, index) => {
-                          return (
-                            news.title && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <NewsCard
-                                  newsUrl={news.url}
-                                  title={news.title}
-                                  image={news.image}
-                                  date={news.date}
-                                  source={news.source}
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
-                      </CarouselContent>
-                      <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
-                    </Carousel>
-                    <div className="w-full flex justify-center items-center mt-3">
-                      <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
-                        More News
-                        <ChevronRight className="h-6 w-6" />
-                      </button>
-                    </div>
-                  </div> */}
-
-                  {/* --------------- relevant links --------------- */}
-
-                  {queryResult && (
-                    <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
-                      <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">More Results</p>
-                      <RelevantLinks links={queryResult.slice(-10)} type="more" />
-                    </ScrollArea>
-                  )}
                 </>
               )}
             </div>

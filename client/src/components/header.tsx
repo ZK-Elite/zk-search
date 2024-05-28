@@ -24,7 +24,7 @@ const Header = () => {
       }`}
     >
       <div className="flex w-full md:px-4 pt-6 pb-4 items-end">
-        {pathname === "/search" && (
+        {(pathname === "/search" || pathname === "/videos") && (
           <div className="flex sm:flex-row flex-col w-full gap-3">
             <div className="flex items-center justify-start md:w-20 w-full">
               <a
@@ -59,7 +59,7 @@ const Header = () => {
           <ThemeButton />
         </div>
       </div>
-      {pathname === "/search" && (
+      {(pathname === "/search" || pathname === "/videos") && (
         <div className="flex flex-row sm:gap-5 sm:justify-start justify-between sm:ml-[72px]">
           {buttonTabs.map((item, index) => (
             <button
