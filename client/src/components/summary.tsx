@@ -20,6 +20,7 @@ const Summary: React.FC<SummaryProps> = ({ description, urls }) => {
   const [state, copyToClipboard] = useCopyToClipboard();
   const [copySuccess, setCopySuccess] = useState(false);
 
+
   useEffect(() => {
     if (description) {
       const chunks = description.split(" ");
