@@ -4,11 +4,11 @@ import { NewsTypes } from "../data/search-types";
 import { timeAgo } from "../hook/useTimeAgo";
 
 interface NewsCardProps {
-  newsUrl: string
-  title: string
-  image: string
-  date: string
-  source: string
+  newsUrl: string;
+  title: string;
+  image: string;
+  date: string;
+  source: string;
 }
 interface CustomLoaderProps {
   src: string;
@@ -18,9 +18,15 @@ interface CustomLoaderProps {
 
 const customLoader = ({ src }: CustomLoaderProps) => {
   return src;
-}
+};
 
-const NewsCard: React.FC<NewsCardProps> = ({ newsUrl, title, date, image, source }) => {
+const NewsCard: React.FC<NewsCardProps> = ({
+  newsUrl,
+  title,
+  date,
+  image,
+  source,
+}) => {
   const [error, setError] = React.useState(false);
 
   const handleNewsError = () => {
@@ -41,10 +47,16 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsUrl, title, date, image, source
           unoptimized
         />
       </a>
-      <p className="text-base font-medium leading-5 text-white dark:text-black">{title}</p>
+      <p className="text-base font-medium leading-5 text-white dark:text-black">
+        {title}
+      </p>
       <div className="flex flex-row justify-between items-center">
-        <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">{source}</p>
-        <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">{timeAgo(date)}</p>
+        <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">
+          {source?.length > 25 ? source.slice(0, 25) + "..." : source}
+        </p>
+        <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">
+          {timeAgo(date)}
+        </p>
       </div>
     </div>
   );
