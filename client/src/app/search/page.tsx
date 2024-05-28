@@ -21,7 +21,7 @@ import { Adtype } from "../../data/types";
 import NewsCard from "@/src/components/news";
 import logoImg from "../../../public/logo.svg";
 import ImageCard from "@/src/components/image";
-import { ImageTypes, NewsTypes, QueryTypes, SuggestTypes, VideoTypes } from "@/src/data/search-types";
+import { ImageTypes, NewsTypes, QueryTypes, VideoTypes } from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -59,7 +59,7 @@ export default function Page() {
         setPending(false);
         setSummaryResult(venisData.data)
       }).catch((err) => {
-        console.log("error")
+        console.error("Error fetching Venice data")
       });
 
       const apiCalls = [
@@ -156,7 +156,7 @@ export default function Page() {
                   {queryResult && (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
                       <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Results</p>
-                      <RelevantLinks links={queryResult} />
+                      <RelevantLinks links={queryResult.slice(0, 10)} />
                     </ScrollArea>
                   )}
 
@@ -229,7 +229,7 @@ export default function Page() {
                   {queryResult && (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
                       <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">More Results</p>
-                      <RelevantLinks links={queryResult} />
+                      <RelevantLinks links={queryResult.slice(-10)} type="more" />
                     </ScrollArea>
                   )}
                 </>

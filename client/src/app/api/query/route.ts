@@ -12,7 +12,15 @@ interface TextResponse {
 export async function POST(req: Request): Promise<Response> {
     try {
         const json: SearchRequestBody = await req.json();
-        const { keywords, result = 10 } = json;
+        const { keywords, result = 20 } = json;
+
+        if (!keywords) {
+            return NextResponse.json(
+                { error: 'Keywords are required' },
+                { status: 400 }
+            );
+        }
+
         const base_url = `${process.env.ZKSEARCH_BACKEND}/api/search/query`;
 
         const textResponse = await fetch(base_url, {

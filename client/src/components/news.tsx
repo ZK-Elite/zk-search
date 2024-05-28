@@ -33,7 +33,7 @@ const NewsCard: React.FC<NewsCardProps> = ({ newsUrl, title, date, image, source
         <Image
           className="w-full md:h-[120px] rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
           loader={customLoader}
-          src={error ? "images/icons/placeholder-img.svg" : image}
+          src={!image ? "images/icons/placeholder-img.svg" : image}
           alt={title}
           width={500}
           height={500}

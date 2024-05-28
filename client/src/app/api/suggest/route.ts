@@ -6,6 +6,13 @@ export async function POST(req: Request) {
 
         const { query } = json;
 
+        if (!query) {
+            return NextResponse.json(
+                { error: 'Queries are required' },
+                { status: 400 }
+            );
+        }
+
         const base_url = 'https://api.bing.com/osjson.aspx'
 
         const params = new URLSearchParams({
