@@ -134,9 +134,9 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                 <div
                   className={`absolute ${
                     pathname === "/"
-                      ? "border-2  border-[#38E5FF] dark:bg-[#cbf8ffbd]"
-                      : "border border-[#27272aee]  dark:bg-[#d3e8eb] "
-                  } bg-gradient-to-b from-[#121e22] to-[#121e22ab] flex border-t-0 flex-col top-full -left-[2px] right-1 rounded-b-lg   md:w-[552px] w-full  z-50`}
+                      ? "border-2 -left-[2px] right-1 border-[#38E5FF] dark:bg-[#cbf8ffbd]"
+                      : "border border-[#27272aee] -left-[1px] right-0  dark:bg-[#d3e8eb] "
+                  } bg-gradient-to-b from-[#121e22] to-[#121e22ab] flex border-t-0 flex-col top-full  rounded-b-lg   md:w-[552px] w-full  z-50`}
                 >
                   {suggestions?.length > 0 && (
                     <div className="h-[1px] border-solid border border-[#27272A] mx-auto w-[90%] bg-[#27272A] mt-0" />
