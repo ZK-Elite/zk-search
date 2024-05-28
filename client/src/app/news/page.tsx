@@ -2,7 +2,6 @@
 
 import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { GoogleSearchResponse } from "../../data/googletypes";
 import {
   Carousel,
   CarouselContent,
@@ -14,7 +13,7 @@ import NewsVideoCard from "@/src/components/news-video";
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
-  const [result, setResult] = useState<GoogleSearchResponse>();
+  const [result, setResult] = useState();
 
   const [loading, setLoading] = useState(true);
 
