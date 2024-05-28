@@ -14,7 +14,7 @@ export async function POST(req: Request): Promise<Response> {
         const json: SearchRequestBody = await req.json();
         const { keywords, result = 10 } = json;
 
-        if (!json.keywords) {
+        if (keywords) {
             return NextResponse.json(
                 { error: 'Keywords are required' },
                 { status: 400 }

@@ -6,7 +6,7 @@ export async function POST(req: Request) {
 
         const { query } = json;
 
-        if (!json.query) {
+        if (query) {
             return NextResponse.json(
                 { error: 'Queries are required' },
                 { status: 400 }
