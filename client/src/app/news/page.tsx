@@ -59,7 +59,7 @@ export default function Page() {
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 content-group-right-first ">
-              {loading ? (
+              {/* {loading ? (
                 <SkeletonForPage />
               ) : (
                 <>
@@ -91,7 +91,7 @@ export default function Page() {
                     </button>
                   </div>
                 </>
-              )}
+              )} */}
             </div>
           </div>
         </div>
