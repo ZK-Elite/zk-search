@@ -31,9 +31,10 @@ export default function Page() {
   const [imageResult, setImageResult] = useState<ImageTypes[]>();
   const [videoResult, setVideoResult] = useState<VideoTypes[]>();
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
-  const [veniceResult, setVeniceResult] = useState<string>();
   const [veniceUrlResult, setVeniceUrlResult] = useState<[]>();
+  const [summaryResult, setSummaryResult] = useState<string>();
   const [loading, setLoading] = useState(true);
+  const [pending, setPending] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
@@ -47,6 +48,20 @@ export default function Page() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
+
+      setPending(true);
+
+      fetchData("/api/venice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      }).then((venisData) => {
+        setPending(false);
+        setSummaryResult(venisData.data)
+      }).catch((err) => {
+        console.log("error")
+      });
+
       const apiCalls = [
         fetchData("/api/query", {
           method: "POST",
@@ -82,17 +97,13 @@ export default function Page() {
             keywords: query,
           }),
         }),
-        fetchData(`/api/venice?q=${query}`, {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }),
         fetchData("/api/ads/fetch", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }),
       ];
 
-      const [queryData, suggestionData, imageData, videoData, newsData, veniceData, adData] = await Promise.all(apiCalls);
+      const [queryData, suggestionData, imageData, videoData, newsData, adData] = await Promise.all(apiCalls);
 
       const hrefArray = queryData.data?.map((item: any) => item.href);
       setVeniceUrlResult(hrefArray);
@@ -101,7 +112,6 @@ export default function Page() {
       setImageResult(imageData.data);
       setVideoResult(videoData.data);
       setNewsResult(newsData.data);
-      setVeniceResult(veniceData.data);
       setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -249,7 +259,7 @@ export default function Page() {
               )}
             </div>
             <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 rounded-2xl content-group-right1 overflow-hidden">
-              {loading ? (
+              {pending ? (
                 <div className="flex items-center justify-between py-6 px-4 min-w-screen">
                   <div className="w-2/12">
                     <Image
@@ -275,9 +285,9 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  {veniceResult && queryResult && (
+                  {summaryResult && queryResult && (
                     <Summary
-                      description={veniceResult}
+                      description={summaryResult}
                       urls={veniceUrlResult ?? []}
                     />
                   )}

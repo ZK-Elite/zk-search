@@ -1,47 +1,93 @@
 import { NextResponse } from 'next/server';
+import axios from 'axios';
+import Groq from "groq-sdk";
 
-export async function GET(req: Request): Promise<Response> {
+export async function POST(req: Request) {
     try {
-        // Parse query parameters from the request URL
-        const url = new URL(req.url);
-        const q = url.searchParams.get('q');
-
-        if (!q) {
-            throw new Error("Query parameter 'q' is required");
+        const json = await req.json();
+        const { query } = json;
+        const result_venice = await ChatByVenice(query);
+        const result_groq = await ChatByGroq(query);
+        // result_venice ? return result_venice : return result_groq
+        if (result_venice.status === 200) {
+            return result_venice
+        } else {
+            return result_groq
         }
-
-        const base_url = `${process.env.DUCKDUCKGO_SEARCH_BACKEND_PORT}/api/search/chat`;
-
-        const params = new URLSearchParams({ q: q });
-
-        const fullUrl = `${base_url}?${params.toString()}`;
-
-        const suggestionResponse = await fetch(fullUrl);
-
-        if (!suggestionResponse.ok) {
-            throw new Error(`Error: ${suggestionResponse.status}\n${suggestionResponse.statusText}`);
-        }
-
-        const responseText = await suggestionResponse.text();
-        if (!responseText) {
-            throw new Error('Received empty response from the server');
-        }
-
-        let results;
-        try {
-            results = JSON.parse(responseText);
-        } catch (error) {
-            throw new Error('Failed to parse JSON response: ' + error);
-        }
-
+    } catch (error) {
+        console.error('Error proxying request to Venice API:', error);
         return NextResponse.json(
-            { data: results },
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
+            { error: error },
+            { status: 500 }
+        );
+    }
+}
+
+async function ChatByVenice(q: string) {
+    try {
+        // Call Venice API directly within the POST handler
+        const date = new Date();
+        const formattedDate = date.toISOString().split('T')[0].replace(/-/g, '');
+        const veniceResponse = await axios.post(
+            "https://venice.ai/api/inference/chat",
+            {
+                prompt: [
+                    {
+                        content: q,
+                        role: "user"
+                    }
+                ],
+                systemPrompt: "",
+                conversationType: "text",
+                seed: formattedDate,
+                modelId: "hermes-2-theta"
+            },
+            {
+                headers: {
+                    'accept': "application/json",
+                    'content-type': "application/json",
+                },
+            }
+        );
+
+        if (veniceResponse.status !== 200) {
+            throw new Error(`Venice API request failed with status ${veniceResponse.status}`);
+        }
+        const veniceData = veniceResponse.data;
+        return NextResponse.json(
+            { status: 200, headers: { 'Content-Type': 'application/json' }, data: veniceData }
         );
     } catch (error) {
-        console.error('Error fetching Venice ai chat :', error);
+        console.error('Error proxying request to Venice API:', error);
         return NextResponse.json(
-            { error: (error as Error).message },
+            { error: error },
+            { status: 500 }
+        );
+    }
+}
+async function ChatByGroq(q: string) {
+    try {
+        const groq = new Groq({
+            apiKey: process.env.GROQ_API_KEY
+        });
+        // Call Groq API directly within the POST handler
+        const chatCompletion = await groq.chat.completions.create({
+            messages: [
+                {
+                    role: "user",
+                    content: q
+                }
+            ],
+            model: "llama3-8b-8192"
+        });
+
+        return NextResponse.json(
+            { status: 200, headers: { 'Content-Type': 'application/json' }, data: chatCompletion.choices[0].message.content }
+        );
+    } catch (error) {
+        console.error('Error proxying request to Corcel API:', error);
+        return NextResponse.json(
+            { error: error },
             { status: 500 }
         );
     }
