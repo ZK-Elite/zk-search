@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <main
-        className="w-screen h-screen relative flex items-center bg-[#00111A] dark:bg-[#CBF8FF] justify-center"
+        className="relative flex justify-center items-center bg-[#00111A] dark:bg-[#CBF8FF] w-screen h-screen"
         style={{
           backgroundImage: "url('images/bg/bg-block.svg')",
           backgroundPosition: "center",

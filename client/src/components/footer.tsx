@@ -13,6 +13,7 @@ const Footer = () => {
   useEffect(() => {
     setIsClient(true);
   }, []);
+  
   return (
     <footer
       className={`w-full px-10 fixed bottom-0 bg-opacity-70 ${
