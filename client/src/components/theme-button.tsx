@@ -37,7 +37,7 @@ export default function ThemeButton() {
                                         }}
                                     />
                                 </div>
-                                <div className={`z-10 flex justify-center items-center ease-in-out w-7 h-7 bg-white absolute rounded-full right-0 transform dark:bg-black ${theme === "light" ? "-translate-x-9" : "translate-x-0"}`}></div>
+                                <div className={`z-10 flex justify-center items-center ease-in-out w-7 h-7 absolute rounded-full right-0 transform bg-black dark:bg-white  ${theme === "light" ? "-translate-x-9" : "translate-x-0"}`}></div>
                             </div>
                         </button>
                     )
