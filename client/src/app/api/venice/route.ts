@@ -9,7 +9,7 @@ export async function POST(req: Request) {
         const result_venice = await ChatByVenice(query);
         const result_groq = await ChatByGroq(query);
         // result_venice ? return result_venice : return result_groq
-        if(result_venice.status===200) {
+        if (result_venice.status === 200) {
             return result_venice
         } else {
             return result_groq
@@ -23,7 +23,7 @@ export async function POST(req: Request) {
     }
 }
 
-async function ChatByVenice(q:string) {
+async function ChatByVenice(q: string) {
     try {
         // Call Venice API directly within the POST handler
         const date = new Date();
@@ -65,7 +65,7 @@ async function ChatByVenice(q:string) {
         );
     }
 }
-async function ChatByGroq(q:string) {
+async function ChatByGroq(q: string) {
     try {
         const groq = new Groq({
             apiKey: process.env.GROQ_API_KEY

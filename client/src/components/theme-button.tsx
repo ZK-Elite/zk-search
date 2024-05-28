@@ -23,7 +23,7 @@ export default function ThemeButton() {
                                         alt="moon"
                                         className="w-4 h-4"
                                         style={{
-                                            filter: theme === "dark" ? "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)" : "brightness(0)"
+                                            filter: theme === "light" ? "brightness(0) invert(1)" : "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)"
                                         }}
                                     />
                                     <Image
@@ -33,11 +33,11 @@ export default function ThemeButton() {
                                         alt="sun"
                                         className="w-4 h-4"
                                         style={{
-                                            filter: theme === "dark" ? "brightness(0) invert(1)" : "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)"
+                                            filter: theme === "light" ? "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)" : "brightness(0)"
                                         }}
                                     />
                                 </div>
-                                <div className={`z-10 flex justify-center items-center ease-in-out w-7 h-7 bg-white absolute rounded-full right-0 transform dark:bg-black ${theme === "light" ? "-translate-x-9" : "translate-x-0"}`}></div>
+                                <div className={`z-10 flex justify-center items-center ease-in-out w-7 h-7 dark:bg-white absolute rounded-full right-0 transform bg-black ${theme === "light" ? "-translate-x-9" : "translate-x-0"}`}></div>
                             </div>
                         </button>
                     )
