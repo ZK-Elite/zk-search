@@ -31,8 +31,7 @@ export default function Page() {
   const [imageResult, setImageResult] = useState<ImageTypes[]>();
   const [videoResult, setVideoResult] = useState<VideoTypes[]>();
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
-  const [veniceResult, setVeniceResult] = useState<string>();
-  const [veniceUrlResult, setVeniceUrlResult] = useState<[]>();
+  const [summaryResult, setSummaryResult] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
 
@@ -81,9 +80,10 @@ export default function Page() {
             keywords: query,
           }),
         }),
-        fetchData(`/api/venice?q=${query}`, {
-          method: "GET",
+        fetchData("/api/venice", {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
         }),
         fetchData("/api/ads/fetch", {
           method: "GET",
@@ -91,7 +91,7 @@ export default function Page() {
         }),
       ];
 
-      const [queryData, suggestionData, imageData, videoData, newsData, veniceData, adData] = await Promise.all(apiCalls);
+      const [queryData, suggestionData, imageData, videoData, newsData, summaryData, adData] = await Promise.all(apiCalls);
 
       const hrefArray = queryData.data?.map((item: any) => item.href);
       setVeniceUrlResult(hrefArray);
@@ -100,7 +100,7 @@ export default function Page() {
       setImageResult(imageData.data);
       setVideoResult(videoData.data);
       setNewsResult(newsData.data);
-      setVeniceResult(veniceData.data);
+      setSummaryResult(summaryData.data);
       setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -274,10 +274,10 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  {veniceResult && queryResult && (
+                  {summaryResult && queryResult && (
                     <Summary
-                      description={veniceResult}
-                      urls={veniceUrlResult ?? []}
+                      description={summaryResult}
+                      urls={Array.isArray(result?.items) ? result.items : []}
                     />
                   )}
                 </>

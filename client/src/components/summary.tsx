@@ -29,6 +29,15 @@ const Summary: React.FC<SummaryProps> = ({ description, urls }) => {
     }
   }, [description]);
 
+  const boldRegex = /\*\*(.*?)\*\*/g;
+
+  const parseDescription = (text: string) => {
+    return text.split(boldRegex).map((part, index) => {
+      // Even indices are regular text, odd indices are bold
+      return index % 2 === 0 ? part : <strong key={index}>{part}</strong>;
+    });
+  };
+
   useEffect(() => {
     let timer: any;
     if (copySuccess) {
@@ -81,7 +90,11 @@ const Summary: React.FC<SummaryProps> = ({ description, urls }) => {
       </div>
       {seeMoreClicked ? (
         <>
-          <p className="text-base text-white dark:text-black">{description}</p>
+          {description?.split("\n").map((des, index) => (
+            <p key={index} className="text-base text-white dark:text-black">
+              {parseDescription(des)}{!des && <br />}
+            </p>
+          ))}
           <div className="sm:flex hidden flex-row gap-2 mt-4">
             {
               urls && urls.slice(0, 3).map((url, index) => {
