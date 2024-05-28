@@ -91,7 +91,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
         <div
           className={cn(
             `relative flex flex-col justify-center w-full items-center bg-[#121e22e0]   ${
-              !open && suggestions?.length == 0
+              !open || suggestions?.length == 0
                 ? "rounded-[14px]"
                 : "rounded-t-[14px] border-b-0 "
             }  px-5 py-1 md:w-[552px] ${
@@ -135,8 +135,8 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                   className={`absolute ${
                     pathname === "/"
                       ? "border-2  border-[#38E5FF] dark:bg-[#cbf8ffbd]"
-                      : "border border-[#27272A]  dark:bg-[#d3e8eb] "
-                  } bg-[#121e22e0] flex border-t-0 flex-col top-full -left-[2px] right-1 rounded-b-lg   md:w-[552px] w-full  z-50`}
+                      : "border border-[#27272aee]  dark:bg-[#d3e8eb] "
+                  } bg-[#121e22] flex border-t-0 flex-col top-full -left-[2px] right-1 rounded-b-lg   md:w-[552px] w-full  z-50`}
                 >
                   {suggestions?.length > 0 && (
                     <div className="h-[1px] bg-[#27272A] mt-1" />
