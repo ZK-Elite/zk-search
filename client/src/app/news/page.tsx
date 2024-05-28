@@ -49,10 +49,8 @@ export default function Page() {
   }, [fetchData, query]);
 
   useEffect(() => {
-    if (query) {
-      loadData();
-    }
-  }, [loadData, query]);
+    loadData();
+  }, [loadData]);
 
   return (
     <>
