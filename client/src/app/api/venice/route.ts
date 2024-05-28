@@ -41,6 +41,14 @@ async function ChatByVenice(q: string) {
             {
                 prompt: [
                     {
+                        content: "you are the best search enginge answer accrodingly to my queires,Create a personalized search experience by using machine learning to tailor results based on individual user preferences and interests",
+                        role: "user"
+                    },
+                    {
+                        content: "ok sure!",
+                        role: "assistant"
+                    },
+                    {
                         content: q,
                         role: "user"
                     }
