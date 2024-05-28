@@ -5,7 +5,6 @@ from app.controllers.summary import DDGSKeywordSummary
 from app.controllers.image import DDGSImage
 from app.controllers.video import DDGSVideo
 from app.controllers.news import DDGSNews
-from app.controllers.chat import DDGSChat
 
 def initialize_resources(app):
     api = Api(app)
@@ -15,4 +14,3 @@ def initialize_resources(app):
     api.add_resource(DDGSImage, '/api/search/image')
     api.add_resource(DDGSVideo, '/api/search/video')
     api.add_resource(DDGSNews, '/api/search/news')
-    api.add_resource(DDGSChat, '/api/search/chat')

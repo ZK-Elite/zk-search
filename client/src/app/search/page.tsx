@@ -29,7 +29,7 @@ export default function Page() {
   const query = searchParams.get("q");
   const [result, setResult] = useState<GoogleSearchResponse>();
   const [videoResult, setVideoResult] = useState<GoogleSearchResponse>();
-  const [veniceResult, setVeniceResult] = useState<string>();
+  const [summaryResult, setSummaryResult] = useState<string>();
   const [suggest, setSuggest] = useState<string[]>(sampleSuggests);
   const [loading, setLoading] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
@@ -61,22 +61,22 @@ export default function Page() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query }),
         }),
-        // fetchData("/api/venice", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ query }),
-        // }),
+        fetchData("/api/venice", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
+        }),
         fetchData("/api/ads/fetch", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }),
       ];
-      const [googleData, googleVideoData, suggestionData, adData] = await Promise.all(apiCalls);
+      const [googleData, googleVideoData, suggestionData, summaryData, adData] = await Promise.all(apiCalls);
 
       setResult(googleData.data);
       setVideoResult(googleVideoData.data);
       setSuggest(suggestionData.data);
-      // setVeniceResult(veniceData.data);
+      setSummaryResult(summaryData.data);
       setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -251,7 +251,7 @@ export default function Page() {
                 <>
                   {(
                     <Summary
-                      description={veniceResult}
+                      description={summaryResult}
                       urls={Array.isArray(result?.items) ? result.items : []}
                     />
                   )}
