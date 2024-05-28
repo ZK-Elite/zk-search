@@ -126,6 +126,7 @@ export default function Page() {
       loadData();
     }
   }, [loadData, query]);
+
   const videoRefs = useRef<HTMLDivElement[]>([]);
   const [maxHeight, setMaxHeight] = useState(0);
   useEffect(() => {
@@ -133,6 +134,7 @@ export default function Page() {
     const heights = videoRefs.current.map(ref => ref ? ref.offsetHeight : 0);
     setMaxHeight(Math.max(...heights));
   }, [videoResult]);
+  
   return (
     <>
       <div className={`flex flex-col items-center md:space-auto space-y-2 ${loading && !queryResult ? 'h-screen' : ''}`}>
