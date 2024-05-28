@@ -127,7 +127,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                   )}
                   {
                     <div
-                      className={`flex gap-3 flex-col ${
+                      className={`flex gap-3  z-50 flex-col ${
                         suggestions.length > 0 && "py-4"
                       }`}
                     >
