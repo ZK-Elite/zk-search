@@ -13,6 +13,14 @@ export async function POST(req: Request): Promise<Response> {
     try {
         const json: SearchRequestBody = await req.json();
         const { keywords, result = 10 } = json;
+
+        if (!json.keywords) {
+            return NextResponse.json(
+                { error: 'Keywords are required' },
+                { status: 400 }
+            );
+        }
+
         const base_url = `${process.env.ZKSEARCH_BACKEND}/api/search/image`;
 
         const textResponse = await fetch(base_url, {
