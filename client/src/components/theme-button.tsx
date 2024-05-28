@@ -23,7 +23,7 @@ export default function ThemeButton() {
                                         alt="moon"
                                         className="w-4 h-4"
                                         style={{
-                                            filter: theme === "light" ? "brightness(0)" : "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)"
+                                            filter: theme === "dark" ? "invert(14%) sepia(7%) saturate(194%) hue-rotate(180deg) brightness(95%) contrast(88%)" : "brightness(0)"
                                         }}
                                     />
                                     <Image
