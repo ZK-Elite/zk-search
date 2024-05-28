@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 
 interface SearchRequestBody {
     keywords: string;
+    result?: number;
 }
 
 interface TextResponse {
@@ -11,8 +12,8 @@ interface TextResponse {
 export async function POST(req: Request): Promise<Response> {
     try {
         const json: SearchRequestBody = await req.json();
-        const { keywords } = json;
-        const base_url = `${process.env.DUCKDUCKGO_SEARCH_BACKEND_PORT}/api/search/news`;
+        const { keywords, result = 10 } = json;
+        const base_url = `${process.env.ZKSEARCH_BACKEND}/api/search/news`;
 
         const textResponse = await fetch(base_url, {
             method: 'POST',
@@ -21,7 +22,7 @@ export async function POST(req: Request): Promise<Response> {
             },
             body: JSON.stringify({
                 keywords: keywords,
-                max_results: 10
+                max_results: result
             })
         });
 
