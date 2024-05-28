@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 import Groq from "groq-sdk";
 
-export async function POST(req: Request) {
+export async function GET(req: Request): Promise<Response> {
     try {
         const json = await req.json();
         const { query } = json;
@@ -50,21 +50,37 @@ async function ChatByVenice(q:string) {
             }
         );
 
-        if (veniceResponse.status !== 200) {
-            throw new Error(`Venice API request failed with status ${veniceResponse.status}`);
+        const suggestionResponse = await fetch(fullUrl);
+
+        if (!suggestionResponse.ok) {
+            throw new Error(`Error: ${suggestionResponse.status}\n${suggestionResponse.statusText}`);
         }
-        const veniceData = veniceResponse.data;
+
+        const responseText = await suggestionResponse.text();
+        if (!responseText) {
+            throw new Error('Received empty response from the server');
+        }
+
+        let results;
+        try {
+            results = JSON.parse(responseText);
+        } catch (error) {
+            throw new Error('Failed to parse JSON response: ' + error);
+        }
+
         return NextResponse.json(
-            { status: 200, headers: { 'Content-Type': 'application/json' }, data: veniceData }
+            { data: results },
+            { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {
-        console.error('Error proxying request to Venice API:', error);
+        console.error('Error fetching Venice ai chat :', error);
         return NextResponse.json(
-            { error: error },
+            { error: (error as Error).message },
             { status: 500 }
         );
     }
 }
+
 async function ChatByGroq(q:string) {
     try {
         const groq = new Groq({

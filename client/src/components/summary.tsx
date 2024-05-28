@@ -6,13 +6,12 @@ import Image from "next/image";
 import logoImg from "../../public/logo.svg";
 import { CopyIcon, CaretDownIcon } from '@radix-ui/react-icons'
 import { useCopyToClipboard } from "react-use";
-import { OrganicResult } from "../data/googletypes";
 import { cn } from "../lib/utils";
 import Link from "next/link";
 
 interface SummaryProps {
   description: string | undefined;
-  urls: OrganicResult[];
+  urls: string[];
 }
 
 const Summary: React.FC<SummaryProps> = ({ description, urls }) => {
@@ -99,9 +98,11 @@ const Summary: React.FC<SummaryProps> = ({ description, urls }) => {
           <div className="sm:flex hidden flex-row gap-2 mt-4">
             {
               urls && urls.slice(0, 3).map((url, index) => {
+                const match = url?.match(/^(?:https?:\/\/)?([^\/]+)/);
+                const domain = match ? match[1] : null;
                 return (
                   <div key={index} className="border border-[#05B7D1] rounded-full text-[#05B7D1] font-bold text-sm py-1 px-2 hover:bg-[#05B7D1] hover:text-white">
-                    <Link href={url.link} target="_blank" className="text-[11px]">{`${index + 1}.${viewLink(url.displayLink)}`}</Link>
+                    <Link href={url} target="_blank" className="text-[11px]">{`${index + 1}.${domain}`}</Link>
                   </div>
                 );
               })
