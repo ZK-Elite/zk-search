@@ -1,10 +1,12 @@
 import Image from "next/image";
 import { ScrollArea } from "../components/ui/scroll-area";
 
-import { OrganicResult } from "../data/googletypes";
+import { QueryTypes } from "../data/search-types";
 import Link from "next/link";
 import React from "react";
-const RelevantLinks: React.FC<{ links: OrganicResult[] }> = ({ links }) => {
+
+const RelevantLinks: React.FC<{ links: QueryTypes[] }> = ({ links }) => {
+
 
   return (
     <ScrollArea className="dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-4">
@@ -13,6 +15,7 @@ const RelevantLinks: React.FC<{ links: OrganicResult[] }> = ({ links }) => {
           return (
             <div key={index} className="relevant-link">
               <div className="flex flex-col items-start gap-3">
+
                 <Link
                   href={link.link}
                   rel="noopener noreferrer"
@@ -56,6 +59,7 @@ const RelevantLinks: React.FC<{ links: OrganicResult[] }> = ({ links }) => {
                   <p className="text-base font-medium text-[#D1D5DB] dark:text-black">
                     {link.snippet}
                   </p>
+
                 </Link>
               </div>
               <br />

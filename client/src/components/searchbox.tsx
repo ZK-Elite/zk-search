@@ -6,6 +6,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation"; // Co
 import { Input } from "./ui/input";
 import axios from "axios";
 import { cn } from "../lib/utils";
+import { SuggestTypes } from "../data/search-types";
 
 interface SearchComponentProps {
   className?: string;
@@ -85,10 +86,9 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
         <div className="absolute -inset-x-4 -inset-y-6 bg-gradient-to-r from-[#38E5FF80] to-[#38E5FF80] rounded-xl blur-2xl opacity-50 " />
         <div
           className={cn(
-            `relative flex flex-col justify-center w-full items-center rounded-[14px] bg-[#121e22e0] px-5 py-1 md:w-[552px] ${
-              pathname === "/"
-                ? "border-2 border-[#38E5FF] dark:bg-[#cbf8ffbd]"
-                : "border border-[#27272A] dark:bg-[#d3e8eb] "
+            `relative flex flex-col justify-center w-full items-center rounded-[14px] bg-[#121e22e0] px-5 py-1 md:w-[552px] ${pathname === "/"
+              ? "border-2 border-[#38E5FF] dark:bg-[#cbf8ffbd]"
+              : "border border-[#27272A] dark:bg-[#d3e8eb] "
             }`
           )}
         >
@@ -122,16 +122,16 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
 
               {open && (
                 <div className="absolute bg-[#121e22e0] flex flex-col top-full left-0 right-0 rounded-lg w-full">
-                  {suggestions.length > 0 && (
+                  {suggestions?.length > 0 && (
                     <div className="h-[1px] bg-[#27272A] mt-1" />
                   )}
                   {
                     <div
-                      className={`flex gap-3 flex-col ${
+                      className={`flex gap-3  z-50 flex-col ${
                         suggestions.length > 0 && "py-4"
                       }`}
                     >
-                      {suggestions.map((suggestion, index) => (
+                      {suggestions?.map((suggestion, index) => (
                         <div
                           key={index}
                           onClick={() => handleSuggestionClick(suggestion)}
