@@ -4,6 +4,7 @@ from app.services.ddgs_service import DDGSearchService
 from app.middleware.validation import validate_request_data
 
 class DDGSByQuery(Resource):
+    @validate_request_data(['keywords', 'max_results'], 'Json')
     def post(self):
         data : dict = request.get_json()
         search_result = DDGSearchService.search_by_query(data)
