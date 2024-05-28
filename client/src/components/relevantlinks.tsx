@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ScrollArea } from "../components/ui/scroll-area";
 
 import { OrganicResult } from "../data/googletypes";
@@ -19,12 +20,31 @@ const RelevantLinks: React.FC<{ links: OrganicResult[] }> = ({ links }) => {
                   className="flex flex-col gap-2"
                 >
                   <div className="flex flex-row">
-                    {link.pagemap?.cse_image?.[0].src && (
-                      <img
+                    {link.pagemap?.cse_image?.[0].src ? (
+                      <Image
+                        width={20}
+                        height={20}
                         alt="images"
                         src={link.pagemap.cse_image[0].src}
                         className="w-5 h-5 rounded-full mr-3"
                       />
+                    ) : (
+                      <div>
+                        <Image
+                          width={20}
+                          height={20}
+                          alt="images"
+                          src={"/No-Fav-Icon-Black.svg"}
+                          className="w-5 h-5 dark:block hidden rounded-full mr-3"
+                        />
+                        <Image
+                          width={20}
+                          height={20}
+                          alt="images"
+                          src={"/No-Fav-Icon-White.svg"}
+                          className="w-5 h-5 dark:hidden block rounded-full mr-3"
+                        />
+                      </div>
                     )}
                     <p className="text-[13px] font-normal hover:text-[#38E5FF] text-[#D1D5DB] dark:text-black leading-6">
                       {"https://"}
