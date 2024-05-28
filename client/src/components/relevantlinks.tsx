@@ -5,7 +5,6 @@ import { OrganicResult } from "../data/googletypes";
 import Link from "next/link";
 import React from "react";
 const RelevantLinks: React.FC<{ links: OrganicResult[] }> = ({ links }) => {
-  console.log(links);
 
   return (
     <ScrollArea className="dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-4">
