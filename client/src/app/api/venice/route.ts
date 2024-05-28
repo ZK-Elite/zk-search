@@ -6,6 +6,14 @@ export async function POST(req: Request) {
     try {
         const json = await req.json();
         const { query } = json;
+
+        if (!query) {
+            return NextResponse.json(
+                { error: 'Queries are required' },
+                { status: 400 }
+            );
+        }
+
         const result_venice = await ChatByVenice(query);
         const result_groq = await ChatByGroq(query);
         // result_venice ? return result_venice : return result_groq
