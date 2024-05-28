@@ -1,6 +1,5 @@
 import os
 from flask import Flask, jsonify
-from app.controllers import initialize_resources
 from werkzeug.exceptions import HTTPException, default_exceptions
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
