@@ -27,7 +27,7 @@ export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
   const [queryResult, setQueryResult] = useState<QueryTypes[]>();
-  const [suggest, setSuggest] = useState<SuggestTypes[]>();
+  const [suggest, setSuggest] = useState<string[]>();
   const [imageResult, setImageResult] = useState<ImageTypes[]>();
   const [videoResult, setVideoResult] = useState<VideoTypes[]>();
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
@@ -55,9 +55,10 @@ export default function Page() {
             keywords: query,
           }),
         }),
-        fetchData(`/api/suggest?q=${query}`, {
-          method: "GET",
+        fetchData("/api/suggest", {
+          method: "POST",
           headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ query }),
         }),
         fetchData("/api/image", {
           method: "POST",
@@ -116,7 +117,7 @@ export default function Page() {
   }, [loadData, query]);
   return (
     <>
-      <div className="flex flex-col items-center md:space-auto space-y-2">
+      <div className={`flex flex-col items-center md:space-auto space-y-2 ${loading && !queryResult ? 'h-screen' : ''}`}>
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl content-group-right-first ">
@@ -339,8 +340,8 @@ export default function Page() {
                     suggest.map((sug, index) => (
                       <RelatedLink
                         key={index}
-                        link={"/search?q=" + sug.phrase}
-                        query={sug.phrase}
+                        link={"/search?q=" + sug}
+                        query={sug}
                       />
                     ))}
                 </>

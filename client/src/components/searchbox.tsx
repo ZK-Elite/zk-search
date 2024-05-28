@@ -21,7 +21,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
   const dropdownRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState(searchParams.get("q") || "");
-  const [suggestions, setSuggestions] = useState<SuggestTypes[]>([]);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   // search function
   const search = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -65,18 +65,12 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
   // fetch suggestions
   const fetchSuggestions = async (input: string) => {
     try {
-      const response = await fetch(`/api/suggest?q=${input}`);
-
-      if (!response.ok) {
-        throw new Error(`Error: ${response.status} ${response.statusText}`);
-      }
-
-      const data = await response.json();
-      if (data) {
-        setSuggestions(data.data.slice(0, 4));
-      }
+      const response = await axios.post("/api/suggest", {
+        query: input,
+      });
+      setSuggestions(response.data.data.slice(0, 4));
     } catch (error) {
-      console.error(`Error fetching suggestions: ${error}`);
+      console.error("Error fetching suggestions:", error);
     }
   };
   // handle suggestions function
@@ -139,7 +133,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                       {suggestions?.map((suggestion, index) => (
                         <div
                           key={index}
-                          onClick={() => handleSuggestionClick(suggestion.phrase)}
+                          onClick={() => handleSuggestionClick(suggestion)}
                           className="pl-3 py-2 cursor-pointer hover:bg-[#FFFFFF12] flex flex-row items-center justify-start rounded-md"
                         >
                           <Image
@@ -150,7 +144,7 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                             className="h-3.5 w-3.5 text-gray-500 mr-3"
                           />
                           <p className="text-white dark:text-black text-sm font-medium">
-                            {suggestion.phrase}
+                            {suggestion}
                           </p>
                         </div>
                       ))}

@@ -1,47 +1,34 @@
 import { NextResponse } from 'next/server';
 
-export async function GET(req: Request): Promise<Response> {
+export async function POST(req: Request) {
     try {
-        // Parse query parameters from the request URL
-        const url = new URL(req.url);
-        const q = url.searchParams.get('q');
+        const json = await req.json();
 
-        if (!q) {
-            throw new Error("Query parameter 'q' is required");
-        }
+        const { query } = json;
 
-        const base_url = `${process.env.DUCKDUCKGO_SEARCH_BACKEND_PORT}/api/search/suggestion`;
+        const base_url = 'https://api.bing.com/osjson.aspx'
 
-        const params = new URLSearchParams({ q: q });
+        const params = new URLSearchParams({
+            query: query,
+        });
 
-        const fullUrl = `${base_url}?${params.toString()}`;
+        const url = `${base_url}?${params.toString()}`;
 
-        const suggestionResponse = await fetch(fullUrl);
+        const suggestionResponse = await fetch(url);
 
         if (!suggestionResponse.ok) {
             throw new Error(`Error: ${suggestionResponse.status}\n${suggestionResponse.statusText}`);
         }
 
-        const responseText = await suggestionResponse.text();
-        if (!responseText) {
-            throw new Error('Received empty response from the server');
-        }
-
-        let results;
-        try {
-            results = JSON.parse(responseText);
-        } catch (error) {
-            throw new Error('Failed to parse JSON response: ' + error);
-        }
+        const results = await suggestionResponse.json();
 
         return NextResponse.json(
-            { data: results },
-            { status: 200, headers: { 'Content-Type': 'application/json' } }
+            { status: 200, headers: { 'Content-Type': 'application/json' }, data: results[1] }
         );
     } catch (error) {
-        console.error('Error fetching Suggest Search :', error);
+        console.error('Error fetching Suggestion data:', error);
         return NextResponse.json(
-            { error: (error as Error).message },
+            { error: error },
             { status: 500 }
         );
     }
