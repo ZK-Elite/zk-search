@@ -16,56 +16,60 @@ const Footer = () => {
 
   return (
     <footer
-      className={`w-full px-10 fixed bottom-0 bg-opacity-70 ${
-        pathname === "/search" && "backdrop-blur"
+      className={`w-full px-10   fixed bottom-0 bg-opacity-70 ${
+        pathname === "/search" && "backdrop-blur max-sm:hidden "
       }`}
     >
       {isClient && (
         <div
-          className={`mx-auto sm:flex hidden flex-row w-full items-center border-t border-[#7E7E7E] ${
+          className={`flex justify-center   sm:justify-between border-t border-[#7E7E7E] items-center gap-4  ${
             pathname === "/search" ? "py-3" : "py-6"
-          }`}
+          } flex-wrap w-full  `}
         >
-          <a
-            href="https://www.zkml.systems/"
-            rel="noopener noreferrer"
-            className="max-sm:mr-3 "
+          <div
+            className={` flex flex-row min-w-[300px] max-sm:justify-center w-full sm:w-1/2 items-center `}
           >
-            <Image
-              width={32}
-              height={32}
-              src={logoImg}
-              className="footerImg ml-2"
-              alt="logoimg"
-              priority
-              style={{
-                width: "32px",
-                height: "auto",
-              }}
-            />
-          </a>
-          <a href="https://www.zkml.systems/" rel="noopener noreferrer">
-            <p className="mx-2 text-white dark:text-black">ZKML</p>
-          </a>
-          {pathname === "/" && (
-            <div className="pl-10">
-              <a href="https://www.zkml.systems/" rel="noopener noreferrer">
-                <Image
-                  width={32}
-                  height={32}
-                  src={"images/icons/zwap-2d.svg"}
-                  className="footerImg ml-2"
-                  alt="logoimg"
-                  priority
-                  style={{
-                    width: "32px",
-                    height: "auto",
-                  }}
-                />
-              </a>
-            </div>
-          )}
-          <div className="ml-auto flex">
+            <a
+              href="https://www.zkml.systems/"
+              rel="noopener noreferrer"
+              className="max-sm:mr-3 "
+            >
+              <Image
+                width={32}
+                height={32}
+                src={logoImg}
+                className="footerImg ml-2"
+                alt="logoimg"
+                priority
+                style={{
+                  width: "32px",
+                  height: "auto",
+                }}
+              />
+            </a>
+            <a href="https://www.zkml.systems/" rel="noopener noreferrer">
+              <p className="mx-2 text-white dark:text-black">ZKML</p>
+            </a>
+            {pathname === "/" && (
+              <div className="pl-10">
+                <a href="https://www.zkml.systems/" rel="noopener noreferrer">
+                  <Image
+                    width={32}
+                    height={32}
+                    src={"images/icons/zwap-2d.svg"}
+                    className="footerImg ml-2"
+                    alt="logoimg"
+                    priority
+                    style={{
+                      width: "32px",
+                      height: "auto",
+                    }}
+                  />
+                </a>
+              </div>
+            )}
+          </div>
+          <div className=" flex">
             <a href="https://twitter.com/ZKMLsystems" rel="noopener noreferrer">
               <Image
                 src={"images/icons/twitter-x.svg"}
