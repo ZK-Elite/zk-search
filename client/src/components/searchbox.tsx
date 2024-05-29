@@ -82,7 +82,11 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
   return (
     <>
       <div className="relative w-full">
-        <div className="absolute -inset-x-4 -inset-y-6 bg-gradient-to-r from-[#38E5FF80] to-[#38E5FF80] rounded-xl blur-2xl opacity-50 " />
+        <div
+          className={`absolute -inset-x-4 -inset-y-6 bg-gradient-to-r from-[#38E5FF80] to-[#38E5FF80] rounded-xl blur-2xl opacity-50 ${
+            pathname !== "/" && "hidden"
+          }`}
+        />
         <div
           className={cn(
             `relative flex flex-col justify-center w-full items-center rounded-[14px] bg-[#121e22e0] px-5 py-1 md:w-[552px] ${
