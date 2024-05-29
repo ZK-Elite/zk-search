@@ -13,6 +13,7 @@ export default function Page() {
   const [queryResult, setQueryResult] = useState<QueryTypes[]>();
   const [videoResult, setVideoResult] = useState<VideoTypes[]>();
   const [loading, setLoading] = useState(true);
+  const [noOfresults, setnoOfResults] = useState(50);
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
@@ -33,13 +34,14 @@ export default function Page() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keywords: query,
-            result: 20,
+            result: 200,
           }),
         }),
       ];
       const [videoData] = await Promise.all(apiCalls);
       console.log(videoData);
-      setVideoResult(videoData.data);
+      const validVideoData = videoData.data.filter((data: any) => data.image_token);
+      setVideoResult(validVideoData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -63,10 +65,20 @@ export default function Page() {
     setMaxHeight(Math.max(...validHeights));
   }, [videoResult]);
 
+  
+  const handleLoadMore = useCallback(() => {
+    if(videoResult) {
+      if (noOfresults + 10 <= videoResult.length) {
+        setnoOfResults(noOfresults + 10);
+      } else {
+        setnoOfResults(videoResult.length);
+      }
+    }
+  }, [videoResult, noOfresults, setnoOfResults]);
   return (
     <>
       <div className="flex flex-col items-center md:space-auto space-y-2 min-h-screen">
-        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
+        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row sm:mb-[8.5rem] mb-[2.5rem] sm:px-9 px-5 gap-8">
           <div className="w-full grid">
             <div className="p-4  rounded-2xl content-group-right-first ">
               {loading ? (
@@ -85,12 +97,11 @@ export default function Page() {
                   ))}
                 </Tile>
               ) : (
-                <div>
+                <>
                   <Tile>
                     {videoResult &&
-                      videoResult.map((video, index) => {
+                      videoResult.slice(0, noOfresults).map((video, index) => {
                         return (
-                          video.image_token && (
                             <div key={index}>
                               <div
                                 ref={(el) => {
@@ -111,11 +122,18 @@ export default function Page() {
                                 />
                               </div>
                             </div>
-                          )
                         );
                       })}
                   </Tile>
-                </div>
+
+                  {(videoResult && noOfresults < videoResult.length) && <div className="w-full flex justify-center items-center mt-10">
+                    <button className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 w-[310px] max-sm:w-11/12"
+                      onClick={handleLoadMore}
+                    >
+                      Load More
+                    </button>
+                  </div>}
+                </>
               )}
             </div>
           </div>
