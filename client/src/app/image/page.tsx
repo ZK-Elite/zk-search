@@ -12,6 +12,7 @@ export default function Page() {
   const query = searchParams.get("q");
   const [imageResult, setImageResult] = useState<ImageTypes[]>();
   const [loading, setLoading] = useState(true);
+  const [loadMore, setLoadMore] = useState(false);
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
@@ -30,7 +31,7 @@ export default function Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           keywords: query,
-          max_results: 15
+          result: 35
         }),
       }).then((imageData) => {
         console.log(imageData.data)
@@ -55,7 +56,7 @@ export default function Page() {
 
   return (
     <>
-      <div className={`flex flex-col items-center md:space-auto space-y-2 ${loading && imageResult ? 'h-screen' : ''}`}>
+      <div className={`flex flex-col items-center md:space-auto space-y-2 h-screen ${!loading && !imageResult || 'h-auto'}`}>
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
 
           <div className="flex-auto w-full xl:w-5/12">
@@ -71,7 +72,7 @@ export default function Page() {
                   <>
                     <div>
                       <Gallery images={
-                        imageResult.map(image => {
+                        (loadMore ? imageResult : imageResult.slice(0,20)).map(image => {
                           return {
                             src: image.image,
                             width: image.width,
@@ -82,11 +83,13 @@ export default function Page() {
                           }
                         })
                       } margin={7} />
-                      <div className="w-full flex justify-center items-center mt-3">
-                        <button className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 w-[310px] max-sm:w-11/12">
+                      {!loadMore && <div className="w-full flex justify-center items-center mt-3">
+                        <button className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 w-[310px] max-sm:w-11/12"
+                          onClick={() => setLoadMore(true)}
+                        >
                           Load More
                         </button>
-                      </div>
+                      </div>}
                     </div>
                   </>
                 )}
