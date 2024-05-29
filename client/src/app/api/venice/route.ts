@@ -67,7 +67,9 @@ async function ChatByVenice(q: string) {
         );
 
         if (veniceResponse.status !== 200) {
-            throw new Error(`Venice API request failed with status ${veniceResponse.status}`);
+            return NextResponse.json(
+                { status: veniceResponse.status, headers: { 'Content-Type': 'application/json' }, error: `Venice API request failed with status ${veniceResponse.status}` }
+            );
         }
         const veniceData = veniceResponse.data;
         return NextResponse.json(
@@ -96,7 +98,6 @@ async function ChatByGroq(q: string) {
             ],
             model: "llama3-8b-8192"
         });
-
         return NextResponse.json(
             { status: 200, headers: { 'Content-Type': 'application/json' }, data: chatCompletion.choices[0].message.content }
         );
