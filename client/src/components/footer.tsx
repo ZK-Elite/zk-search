@@ -19,13 +19,11 @@ const Footer = () => {
       }`}
     >
       <div
-        className={`flex justify-center   sm:justify-between items-center gap-4  ${
+        className={`flex justify-center sm:justify-between items-center gap-4  ${
           pathname !== "/" ? "py-3" : "py-6"
         } flex-wrap w-full  `}
       >
-        <div
-          className={` flex flex-row min-w-[300px] max-sm:justify-center w-full sm:w-1/2 items-center `}
-        >
+        <div className="flex flex-row min-w-[300px] max-sm:justify-center w-full sm:w-1/2 items-center">
           <Link
             href="https://www.zkml.systems/"
             rel="noopener noreferrer"
@@ -47,20 +45,18 @@ const Footer = () => {
           <Link href="https://www.zkml.systems/" rel="noopener noreferrer">
             <p className="mx-2 text-white dark:text-black">ZKML</p>
           </Link>
-          {pathname === "/" && (
-            <div className="pl-10">
-              <Link href="https://www.zkml.systems/" rel="noopener noreferrer">
-                <Image
-                  width={32}
-                  height={32}
-                  src={"images/icons/zwap-2d.svg"}
-                  className="footerImg ml-2 w-10"
-                  alt="logoimg"
-                  priority
-                />
-              </Link>
-            </div>
-          )}
+          {/* <div className="pl-10">
+            <Link href="https://www.zkml.systems/" rel="noopener noreferrer">
+              <Image
+                width={32}
+                height={32}
+                src={"images/icons/zwap-2d.svg"}
+                className="footerImg ml-2 w-10"
+                alt="logoimg"
+                priority
+              />
+            </Link>
+          </div> */}
         </div>
         <div className=" flex">
           <a href="https://twitter.com/ZKMLsystems" rel="noopener noreferrer">

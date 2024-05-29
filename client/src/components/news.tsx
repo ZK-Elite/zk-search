@@ -35,10 +35,10 @@ const NewsCard: React.FC<NewsCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-3 items-stretch h-full justify-between gap-3 hover:scale-[.98] cursor-pointer transition-transform duration-300">
+    <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-3 items-stretch h-full justify-between gap-2 hover:scale-[.98] cursor-pointer transition-transform duration-300">
       <Link href={newsUrl} className="w-full">
         <Image
-          className="w-full md:h-40 rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
+          className="w-full md:h-36 rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
           loader={customLoader}
           src={!image ? "images/icons/placeholder-img.svg" : image}
           alt={title}

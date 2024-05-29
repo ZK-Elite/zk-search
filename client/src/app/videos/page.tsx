@@ -106,7 +106,10 @@ export default function Page() {
                                   content={video.content}
                                   description={video.description}
                                   duration={video.duration}
-                                  src={video.images.large}
+                                  src={
+                                    video?.images?.large ??
+                                    video?.images?.medium
+                                  }
                                   title={video.title}
                                   publisher={video.publisher}
                                 />
