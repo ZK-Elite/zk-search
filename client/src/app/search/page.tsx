@@ -29,6 +29,7 @@ import {
   QueryTypes,
   VideoTypes,
 } from "@/src/data/search-types";
+import Link from "next/link";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -106,6 +107,7 @@ export default function Page() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keywords: query,
+            result: 15,
           }),
         }),
         fetchData("/api/ads/fetch", {
@@ -255,10 +257,13 @@ export default function Page() {
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
                     <div className="w-full flex justify-center items-center mt-3">
-                      <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
+                      <Link
+                        href={`/videos?q=${encodeURI(query ?? "")}`}
+                        className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5"
+                      >
                         More Videos
                         <ChevronRight className="h-6 w-6" />
-                      </button>
+                      </Link>
                     </div>
                   </div>
 
@@ -273,7 +278,8 @@ export default function Page() {
                         {newsResult ? (
                           newsResult.map((news, index) => {
                             return (
-                              news.title && (
+                              news.title &&
+                              news.image && (
                                 <CarouselItem
                                   className="md:basis-1/2 lg:basis-[31%] items-stretch"
                                   key={index}
@@ -312,10 +318,13 @@ export default function Page() {
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
                     <div className="w-full flex justify-center items-center mt-3">
-                      <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
+                      <Link
+                        href={`/news?q=${encodeURI(query ?? "")}`}
+                        className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5"
+                      >
                         More News
                         <ChevronRight className="h-6 w-6" />
-                      </button>
+                      </Link>
                     </div>
                   </div>
 

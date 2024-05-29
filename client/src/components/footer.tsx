@@ -13,9 +13,9 @@ const Footer = () => {
 
   return (
     <footer
-      className={`w-full px-10  fixed bottom-0 bg-opacity-70 ${
+      className={`w-full px-10  fixed bottom-0 bg-opacity-70 border-t border-[#27272A] ${
         pathname !== "/" &&
-        "backdrop-blur-xl bg-[#00111A] dark:bg-[#E5FCFF] border-t border-[#27272A] max-sm:hidden "
+        "backdrop-blur-xl bg-[#00111A] dark:bg-[#E5FCFF] max-sm:hidden "
       }`}
     >
       <div

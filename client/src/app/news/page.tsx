@@ -5,14 +5,14 @@ import Tile from "@/src/components/ui/tile";
 import { useSearchParams } from "next/navigation";
 import { Skeleton } from "../../components/ui/skeleton";
 import NewsCard from "@/src/components/news";
-
+import { useRouter } from "next/navigation";
 import { NewsTypes } from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
-
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState(true);
   const [noOfresults, setnoOfResults] = useState(50); // Flag to check if more items are available
@@ -29,8 +29,6 @@ export default function Page() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-      setPending(true);
-
       const apiCalls = [
         fetchData("/api/news", {
           method: "POST",
@@ -52,10 +50,10 @@ export default function Page() {
   }, [fetchData, query, setNewsResult]);
 
   useEffect(() => {
-    if (query) {
-      loadData();
-    }
-  }, [loadData, query]);
+    if (!query) router.push("/");
+
+    loadData();
+  }, [loadData, query, router]);
 
   const handleLoadMore = useCallback(() => {
     if(newsResult) {
