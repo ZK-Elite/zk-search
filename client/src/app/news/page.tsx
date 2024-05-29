@@ -5,16 +5,15 @@ import Tile from "@/src/components/ui/tile";
 import { useSearchParams } from "next/navigation";
 import { Skeleton } from "../../components/ui/skeleton";
 import NewsCard from "@/src/components/news";
-
+import { useRouter } from "next/navigation";
 import { NewsTypes } from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
-
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [pending, setPending] = useState(true);
   const [noOfresults, setnoOfResults] = useState(Number); // Flag to check if more items are available
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
@@ -30,8 +29,6 @@ export default function Page() {
     setLoading(true);
     setnoOfResults(60);
     try {
-      setPending(true);
-
       const apiCalls = [
         fetchData("/api/news", {
           method: "POST",
@@ -43,7 +40,6 @@ export default function Page() {
         }),
       ];
       const [newsData] = await Promise.all(apiCalls);
-      console.log(newsData);
       setNewsResult(newsData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -53,10 +49,10 @@ export default function Page() {
   }, [fetchData, query, noOfresults]);
 
   useEffect(() => {
-    if (query) {
-      loadData();
-    }
-  }, [loadData, query]);
+    if (!query) router.push("/");
+
+    loadData();
+  }, [loadData, query, router]);
 
   const handleLoadMore = () => {
     if (noOfresults + 10 <= 50) {

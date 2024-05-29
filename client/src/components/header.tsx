@@ -20,6 +20,7 @@ const Header = () => {
   const changeState = () => {
     setLayout(!layout);
   };
+  console.log(pathname, pathname.split("/")[1]);
   return (
     <div
       className={`fixed px-5 w-full z-40 ${
@@ -44,40 +45,31 @@ const Header = () => {
               <SearchBox />
               <div className="flex flex-row gap-7 sm:justify-start justify-between">
                 {buttonTabs.map((item, index) => (
-                  <button
+                  <Link
+                    href={`/${item?.value}/?q=${query}`}
                     className={`${
-                      activeBtn === item?.value
+                      pathname.split("/")[1] === item?.value
                         ? "border-b-2 border-[#38E5FF] text-[#38E5FF] dark:text-[#38E5FF]"
                         : "border-b-2 border-transparent text-white dark:text-black"
                     } sm:text-lg gap-2 flex flex-row items-center pb-3`}
-                    key={item?.value}
-                    onClick={() => {
-                      setActiveBtn(item?.value);
-                      if (item?.value === "all")
-                        router.push("/" + "search" + "/?q=" + query);
-                      else router.push("/" + item?.value + "/?q=" + query);
-                    }}
+                    key={index}
                   >
                     <Image
                       src={item.src}
                       width={20}
                       height={20}
                       className={`h-full w-full z-[-1] ${
-                        activeBtn === item.value
+                        pathname.split("/")[1] === item.value
                           ? "none"
                           : "brightness-0 invert dark:brightness-0 dark:invert-0"
-                      }`}
-                      style={{
-                        width: "auto",
-                        height: "auto",
-                      }}
+                      } w-5 h-5`}
                       alt="image"
                       priority
                     />
                     <span className="text-base hidden sm:flex font-medium">
                       {item.title}
                     </span>
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
