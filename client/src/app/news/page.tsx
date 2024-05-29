@@ -28,7 +28,7 @@ export default function Page() {
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    setnoOfResults(20);
+    setnoOfResults(60);
     try {
       setPending(true);
 
@@ -43,6 +43,7 @@ export default function Page() {
         }),
       ];
       const [newsData] = await Promise.all(apiCalls);
+      console.log(newsData);
       setNewsResult(newsData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -58,11 +59,10 @@ export default function Page() {
   }, [loadData, query]);
 
   const handleLoadMore = () => {
-    if (noOfresults + 10 <= 40) {
-      // Ensure not exceeding 40 results
+    if (noOfresults + 10 <= 50) {
       setnoOfResults(noOfresults + 10);
     } else {
-      setnoOfResults(40); // Set to max if adding 10 would exceed 40
+      setnoOfResults(40);
     }
   };
   return (
@@ -88,12 +88,13 @@ export default function Page() {
                 </Tile>
               ) : (
                 <>
-                  <div className="mt-8">
+                  <div className="mt-8 mb-12">
                     <Tile>
                       {newsResult &&
                         newsResult.map((news, index) => {
                           return (
-                            news.title && (
+                            news.title &&
+                            news.image && (
                               <div
                                 className="md:basis-1/2 lg:basis-[19%] items-center"
                                 key={index}
@@ -111,14 +112,14 @@ export default function Page() {
                         })}
                     </Tile>
                   </div>
-                  <div className="w-full flex justify-center items-center mt-9">
+                  {/* <div className="w-full flex justify-center items-center mt-9">
                     <button
                       onClick={handleLoadMore}
                       className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-36"
                     >
                       Load More
                     </button>
-                  </div>
+                  </div> */}
                 </>
               )}
             </div>

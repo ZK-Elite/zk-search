@@ -7,6 +7,7 @@ import {
   CarouselItem,
   CarouselNext,
 } from "../../components/ui/carousel";
+
 import { useRouter } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
@@ -175,13 +176,33 @@ export default function Page() {
                 <>
                   {/* --------------- relevant links --------------- */}
 
-                  {queryResult && (
+                  {queryResult ? (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
                       <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
                         Results
                       </p>
-                      <RelevantLinks links={queryResult.slice(0, 10)} />
+
+                      <RelevantLinks links={queryResult?.slice(0, 10)} />
+
                     </ScrollArea>
+                  ) : (
+                    <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[400px] flex justify-center items-center ">
+                      <Image
+                        src={"/images/icons/Not-Found-White.svg"}
+                        alt="not-found"
+                        width={42}
+                        height={42}
+                        className="dark:hidden block"
+                      />{" "}
+                      <Image
+                        src={"/images/icons/Not-Found-Black.svg"}
+                        alt="not-found"
+                        width={42}
+                        height={42}
+                        className="hidden dark:block "
+                      />{" "}
+                      No results found
+                    </div>
                   )}
 
                   {/* ---------------- video ---------------- */}
@@ -192,7 +213,9 @@ export default function Page() {
                     </p>
                     <Carousel>
                       <CarouselContent>
-                        {videoResult &&
+
+                        {videoResult ? (
+
                           videoResult.map((video, index) => {
                             return (
                               video.image_token && (
@@ -206,12 +229,36 @@ export default function Page() {
                                     duration={video.duration}
                                     src={video.images.large}
                                     title={video.title}
+
+
                                     publisher={video.publisher}
+
                                   />
                                 </CarouselItem>
                               )
                             );
-                          })}
+
+                          })
+                        ) : (
+                          <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
+                            <Image
+                              src={"/images/icons/Not-Found-White.svg"}
+                              alt="not-found"
+                              width={42}
+                              height={42}
+                              className="dark:hidden block"
+                            />{" "}
+                            <Image
+                              src={"/images/icons/Not-Found-Black.svg"}
+                              alt="not-found"
+                              width={42}
+                              height={42}
+                              className="hidden dark:block "
+                            />{" "}
+                            No results found
+                          </div>
+                        )}
+
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -231,7 +278,9 @@ export default function Page() {
                     </p>
                     <Carousel>
                       <CarouselContent>
-                        {newsResult &&
+
+                        {newsResult ? (
+
                           newsResult.map((news, index) => {
                             return (
                               news.title && (
@@ -249,7 +298,28 @@ export default function Page() {
                                 </CarouselItem>
                               )
                             );
-                          })}
+
+                          })
+                        ) : (
+                          <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
+                            <Image
+                              src={"/images/icons/Not-Found-White.svg"}
+                              alt="not-found"
+                              width={42}
+                              height={42}
+                              className="dark:hidden block"
+                            />{" "}
+                            <Image
+                              src={"/images/icons/Not-Found-Black.svg"}
+                              alt="not-found"
+                              width={42}
+                              height={42}
+                              className="hidden dark:block "
+                            />{" "}
+                            No results found
+                          </div>
+                        )}
+
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -263,7 +333,7 @@ export default function Page() {
 
                   {/* --------------- relevant links --------------- */}
 
-                  {queryResult && (
+                  {queryResult ? (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
                       <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">
                         More Results
@@ -273,6 +343,24 @@ export default function Page() {
                         type="more"
                       />
                     </ScrollArea>
+                  ) : (
+                    <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
+                      <Image
+                        src={"/images/icons/Not-Found-White.svg"}
+                        alt="not-found"
+                        width={42}
+                        height={42}
+                        className="dark:hidden block"
+                      />{" "}
+                      <Image
+                        src={"/images/icons/Not-Found-Black.svg"}
+                        alt="not-found"
+                        width={42}
+                        height={42}
+                        className="hidden dark:block "
+                      />{" "}
+                      No results found
+                    </div>
                   )}
                 </>
               )}
