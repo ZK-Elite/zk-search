@@ -44,6 +44,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
+  const [adIndex, setAdIndex] = useState(0);
   const router = useRouter();
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
@@ -110,10 +111,6 @@ export default function Page() {
             result: 15,
           }),
         }),
-        fetchData("/api/ads/fetch", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
-        }),
       ];
 
       const [
@@ -122,7 +119,6 @@ export default function Page() {
         imageData,
         videoData,
         newsData,
-        adData,
       ] = await Promise.all(apiCalls);
 
       const hrefArray = queryData.data?.map((item: any) => item.href);
@@ -132,7 +128,6 @@ export default function Page() {
       setImageResult(imageData.data);
       setVideoResult(videoData.data);
       setNewsResult(newsData.data);
-      setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -140,11 +135,30 @@ export default function Page() {
     }
   }, [fetchData, query]);
 
+  const fetchAds = useCallback(async()=> {
+    const adsData = await fetch("/api/ads/fetch", {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    });
+    const ads = await adsData.json();
+    setAd(ads);
+  }, []);
+
   useEffect(() => {
     if (query) {
       loadData();
+      fetchAds();
     }
-  }, [loadData, query]);
+  }, [fetchAds, loadData, query]);
+
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAdIndex((prevIndex) => (ad.length > 0 ? (prevIndex + 1) % ad.length : 0));
+    }, 5000); // Change ad every 10 seconds
+
+    return () => clearInterval(interval); // Cleanup interval on component unmount
+  }, [ad]);
 
   if (!query) {
     router.push("/");
@@ -378,9 +392,9 @@ export default function Page() {
                   {ad?.length > 0 && (
                     <div className="flex w-full h-full">
                       <AdsCard
-                        imgUrl={ad[0].image}
-                        title={ad[0].title}
-                        url={ad[0].url}
+                        imgUrl={ad[adIndex].image}
+                        title={ad[adIndex].title}
+                        url={ad[adIndex].url}
                       />
                     </div>
                   )}

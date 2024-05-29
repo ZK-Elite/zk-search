@@ -22,12 +22,12 @@ export async function GET(): Promise<NextResponse> {
     // Filter ads to include only those that have not expired
     const activeAds = ads.filter((ad: Ad) => ad.expiresAt >= today);
 
-    // Sort ads by createdAt date in descending order (latest first)
-    const sortedAds = activeAds.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
+    // // Sort ads by createdAt date in descending order (latest first)
+    // const sortedAds = activeAds.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 
-    // Retrieve only the latest ad
-    const latestAd = sortedAds.length > 0 ? [sortedAds[0]] : [];
-
+    // // Retrieve only the latest ad
+    // const latestAd = sortedAds.length > 0 ? [sortedAds[0]] : [];
+    // console.log(latestAd);
     // Return the latest ad as a JSON response
-    return NextResponse.json(latestAd);
+    return NextResponse.json(activeAds);
 }
