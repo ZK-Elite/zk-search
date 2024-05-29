@@ -83,9 +83,8 @@ export default function Page() {
                         })
                       } margin={7} />
                       <div className="w-full flex justify-center items-center mt-3">
-                        <button className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 max-sm:w-full">
+                        <button className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 w-[310px] max-sm:w-11/12">
                           Load More
-                          <ChevronRight className="h-6 w-6" />
                         </button>
                       </div>
                     </div>

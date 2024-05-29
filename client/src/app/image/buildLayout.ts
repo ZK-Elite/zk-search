@@ -35,20 +35,20 @@ const getRow = <T extends Image = Image>(
   { containerWidth, rowHeight, margin }: BuildLayoutOptions
 ): [ImageExtendedRow<T>, T[]] => {
   const row: ImageExtendedRow<T> = [];
-  const imgMargin = 2 * margin;
+  const imgMargin = margin ? margin * 2 : 0;
   const items = [...images];
 
   let totalRowWidth = 0;
   while (items.length > 0 && totalRowWidth < containerWidth) {
     const item = items.shift();
-    const scaledWidth = Math.floor(rowHeight * (item.width / item.height));
+    const scaledWidth = (rowHeight && item) ? Math.floor(rowHeight * (item.width / item.height)) : 0;
     const extendedItem: ImageExtended<T> = {
       ...item,
       scaledHeight: rowHeight,
       scaledWidth,
       viewportWidth: scaledWidth,
       marginLeft: 0,
-    };
+    } as ImageExtended<T>;
     row.push(extendedItem);
     totalRowWidth += extendedItem.scaledWidth + imgMargin;
   }
@@ -103,5 +103,5 @@ export const buildLayoutFlat = <T extends Image = Image>(
   options: BuildLayoutOptions
 ): ImageExtendedRow<T> => {
   const rows = buildLayout(images, options);
-  return [].concat.apply([], rows);
+  return rows.reduce((acc, row) => acc.concat(row), [] as ImageExtended<T>[]);
 };

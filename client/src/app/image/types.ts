@@ -42,7 +42,7 @@ export type EventHandler<T extends Image = Image> = (
 ) => void;
 
 export type StyleFunctionContext<T extends Image = Image> = {
-  item: T;
+  item: ImageExtended;
 };
 
 export type StyleFunction<T extends Image = Image> = (

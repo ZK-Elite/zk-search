@@ -1,4 +1,4 @@
-import { Image } from "./Image";
+import { GalleryImage } from "./Image";
 import { useContainerWidth } from "./useContainerWidth";
 import { buildLayoutFlat } from "./buildLayout";
 import { Image as ImageInterface, GalleryProps } from "./types";
@@ -30,7 +30,7 @@ export const Gallery = <T extends ImageInterface>({
     <div id={id} className="ReactGridGallery" ref={containerRef}>
       <div style={styles.gallery}>
         {thumbnails.map((item, index) => (
-          <Image
+          <GalleryImage
             key={item.key || index}
             item={item}
             index={index}
