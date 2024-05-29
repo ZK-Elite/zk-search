@@ -1,29 +1,43 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
-
+import React, { useCallback, useEffect, useState, useRef } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+} from "../../components/ui/carousel"
 import Tile from "@/src/components/ui/tile";
-
+import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-
+import Summary from "../../components/summary";
+import RelevantLinks from "../../components/relevantlinks";
+import RelatedLink from "../../components/relatedlink";
+import VideoCard from "../../components/video";
+import { ScrollArea } from "../../components/ui/scroll-area";
 import { Skeleton } from "../../components/ui/skeleton";
-
+import AdsCard from "../../components/AdsCard";
 import { Adtype } from "../../data/types";
 import NewsCard from "@/src/components/news";
-
-import { NewsTypes, QueryTypes } from "@/src/data/search-types";
+import logoImg from "../../../public/logo.svg";
+import ImageCard from "@/src/components/image";
+import { ImageTypes, NewsTypes, QueryTypes, VideoTypes } from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
   const [queryResult, setQueryResult] = useState<QueryTypes[]>();
- 
+  const [suggest, setSuggest] = useState<string[]>();
+  const [imageResult, setImageResult] = useState<ImageTypes[]>();
+  const [videoResult, setVideoResult] = useState<VideoTypes[]>();
   const [newsResult, setNewsResult] = useState<NewsTypes[]>();
-
+  const [veniceUrlResult, setVeniceUrlResult] = useState<[]>();
+  const [summaryResult, setSummaryResult] = useState<string>();
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
-  const [noOfresults, setnoOfResults] = useState(Number); // Flag to check if more items are available
+
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
     if (!response.ok) {
@@ -34,29 +48,28 @@ export default function Page() {
 
   const loadData = useCallback(async () => {
     setLoading(true);
-    setnoOfResults(20);
     try {
-      
+
       setPending(true);
 
       const apiCalls = [
-        fetchData("/api/news", {
+        fetchData("/api/video", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keywords: query,
-            result:noOfresults,
+            result: 20
           }),
         }),
       ];
-      const [newsData] = await Promise.all(apiCalls);
-      setNewsResult(newsData.data);
+      const [videoData] = await Promise.all(apiCalls);
+      setVideoResult(videoData.data);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
       setLoading(false);
     }
-  }, [fetchData, query,noOfresults]);
+  }, [fetchData, query]);
 
   useEffect(() => {
     if (query) {
@@ -64,14 +77,14 @@ export default function Page() {
     }
   }, [loadData, query]);
 
- 
-  const handleLoadMore = () => {
-    if (noOfresults + 10 <= 40) {  // Ensure not exceeding 40 results
-      setnoOfResults(noOfresults + 10);
-    } else {
-      setnoOfResults(40); // Set to max if adding 10 would exceed 40
-    }
-  };
+  const videoRefs = useRef<HTMLDivElement[]>([]);
+  const [maxHeight, setMaxHeight] = useState(0);
+  useEffect(() => {
+    const heights = videoRefs.current.map(ref => ref ? ref.offsetHeight : 0);
+    const validHeights = heights.filter(height => height > 0 && height < 300)
+    setMaxHeight(Math.max(...validHeights));
+  }, [videoResult]);
+  
   return (
     <>
       <div className={`flex flex-col items-center md:space-auto space-y-2 ${loading && !queryResult ? 'h-screen' : ''}`}>
@@ -99,39 +112,34 @@ export default function Page() {
               ) : (
                 <>
 
-               
+                  {/* ---------------- video ---------------- */}
 
                   <div className="mt-8">
-                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">news</p>
+                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">Videos</p>
                     <Tile>
-                    {newsResult &&
-                        newsResult.map((news, index) => {
-                          return (
-                            news.title && (
+                      {videoResult && videoResult.map((video, index) => {
+                        return (
+                          video.image_token && (
+                            <div key={index}>
                               <div
-                                className="md:basis-1/2 lg:basis-[19%] items-center"
-                                key={index}
+                                ref={el => {
+                                  if (el) videoRefs.current[index] = el;
+                                }}
+                                style={{ height: maxHeight }}
                               >
-                                <NewsCard
-                                  newsUrl={news.url}
-                                  title={news.title}
-                                  image={news.image}
-                                  date={news.date}
-                                  source={news.source}
+                                <VideoCard
+                                  content={video.content}
+                                  description={video.description}
+                                  duration={video.duration}
+                                  src={video.images.large}
+                                  title={video.title}
                                 />
                               </div>
-                            )
-                          );
-                        })}
+                            </div>
+                          )
+                        );
+                      })}
                     </Tile>
-                  </div>
-                  <div className="w-full flex justify-center items-center mt-9">
-                    <button
-                      onClick={handleLoadMore}
-                      className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-36"
-                    >
-                      Load More
-                    </button>
                   </div>
                 </>
               )}
