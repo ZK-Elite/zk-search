@@ -1,13 +1,9 @@
 import React from "react"
 import { cn } from "../../lib/utils"
 
-interface TileProps {
-
-}
-
 const Tile = React.forwardRef<
     HTMLDivElement,
-    React.HTMLAttributes<HTMLDivElement> & TileProps
+    React.HTMLAttributes<HTMLDivElement>
 >(({ className, ...props }, ref) => {
     return (
         <div
