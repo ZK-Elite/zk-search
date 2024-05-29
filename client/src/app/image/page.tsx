@@ -31,7 +31,7 @@ export default function Page() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           keywords: query,
-          result: 35
+          result: 50
         }),
       }).then((imageData) => {
         console.log(imageData.data)
@@ -57,7 +57,7 @@ export default function Page() {
   return (
     <>
       <div className={`flex flex-col items-center md:space-auto space-y-2 ${(!loading && imageResult) ? 'h-auto' : 'h-screen'}`}>
-        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
+        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row sm:mb-[8.5rem] mb-[2.5rem] sm:px-9 px-5 gap-8">
 
           <div className="flex-auto w-full xl:w-5/12">
             {imageResult && (
@@ -72,7 +72,7 @@ export default function Page() {
                   <>
                     <div>
                       <Gallery images={
-                        (loadMore ? imageResult : imageResult.slice(0,20)).map(image => {
+                        (loadMore ? imageResult : imageResult.slice(0,25)).map(image => {
                           return {
                             src: image.image,
                             width: image.width,
