@@ -6,7 +6,6 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Input } from "./ui/input";
 import axios from "axios";
 import { cn } from "../lib/utils";
-import { SuggestTypes } from "../data/search-types";
 
 interface SearchComponentProps {
   className?: string;
@@ -86,20 +85,22 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
     <>
       <div className="relative w-full">
         <div
-          className={`absolute -inset-x-4 -inset-y-6 bg-gradient-to-r from-[#38E5FF80] to-[#38E5FF80]  rounded-xl blur-2xl opacity-50  `}
+          className={`absolute -inset-x-4 -inset-y-6 bg-gradient-to-r from-[#38E5FF80] to-[#38E5FF80] rounded-xl blur-2xl opacity-50 ${
+            pathname !== "/" && "hidden"
+          }`}
         />
         <div
           className={cn(
-            `relative flex flex-col justify-center w-full items-center bg-[#121e22e0]   ${
-              !open && suggestions?.length > 0
-                ? "rounded-[14px]"
-                : "rounded-t-[14px] border-b-0 "
-            }  px-5 py-1 md:w-[552px] ${
+            `relative flex flex-col justify-center w-full items-center  bg-[#121e22]   ${
+              !open || suggestions?.length == 0
+                ? "rounded-[14px] "
+                : "rounded-t-[14px]  "
+            }  p-1 md:w-[552px] ${
               pathname === "/"
                 ? `border-2 border-[#38E5FF] ${
                     open && "border-b-0"
                   } dark:bg-[#cbf8ffbd]`
-                : "border border-[#27272A] rounded-[14px] dark:bg-[#d3e8eb] "
+                : "border border-[#27272A]  dark:bg-[#d3e8eb] "
             } `
           )}
         >
@@ -134,39 +135,35 @@ const SearchBox: React.FC<SearchComponentProps> = ({ className }) => {
                 <div
                   className={`absolute ${
                     pathname === "/"
-                      ? "border-2 border-t-0 border-[#38E5FF] rounded-b-lg dark:bg-[#cbf8ffbd]"
-                      : "border border-[#27272A] rounded-lg dark:bg-[#d3e8eb] "
-                  } bg-[#121e22e0] flex  flex-col top-full -left-[2px] right-1   md:w-[552px] w-full  z-50`}
+                      ? "border-2 -left-[2px] right-1 border-[#38E5FF]"
+                      : "border border-[#27272aee] -left-[1px] right-0  dark:bg-[#d3e8eb] "
+                  }  bg-[#121e22] flex border-t-0 flex-col top-full rounded-b-lg md:w-[552px] w-full z-50 dark:bg-[#cbf8ffbd]`}
                 >
                   {suggestions?.length > 0 && (
-                    <div className="h-[1px] bg-[#27272A] mt-1" />
+                    <>
+                      <div className="h-[1px] border-solid border border-[#27272A] mx-auto w-[90%] bg-[#27272A] mt-0" />
+                      <div className={`flex gap-3 px-4 flex-col py-4`}>
+                        {suggestions?.map((suggestion, index) => (
+                          <div
+                            key={index}
+                            onClick={() => handleSuggestionClick(suggestion)}
+                            className="pl-2 py-2 cursor-pointer hover:bg-[#FFFFFF] hover:bg-opacity-10 flex flex-row items-center justify-start rounded-lg"
+                          >
+                            <Image
+                              width={15}
+                              height={15}
+                              src="images/icons/search-normal.svg"
+                              alt="Search Icon"
+                              className="h-3.5 w-3.5 text-gray-500 mr-3"
+                            />
+                            <p className="text-white dark:text-black text-sm font-medium">
+                              {suggestion}
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </>
                   )}
-                  {
-                    <div
-                      className={`flex gap-3 flex-col ${
-                        suggestions.length > 0 && "py-4"
-                      }`}
-                    >
-                      {suggestions?.map((suggestion, index) => (
-                        <div
-                          key={index}
-                          onClick={() => handleSuggestionClick(suggestion)}
-                          className="pl-3 py-2 cursor-pointer hover:bg-[#FFFFFF12] flex flex-row items-center justify-start rounded-md"
-                        >
-                          <Image
-                            width={15}
-                            height={15}
-                            src="images/icons/search-normal.svg"
-                            alt="Search Icon"
-                            className="h-3.5 w-3.5 text-gray-500 mr-3"
-                          />
-                          <p className="text-white dark:text-black text-sm font-medium">
-                            {suggestion}
-                          </p>
-                        </div>
-                      ))}
-                    </div>
-                  }
                 </div>
               )}
             </form>

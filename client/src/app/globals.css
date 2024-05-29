@@ -1,3 +1,4 @@
+@import url("https://api.fontshare.com/v2/css?f[]=satoshi@300,301,400,401,500,501,700&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -23,12 +24,11 @@
 @font-face {
   font-family: "Satoshi-Variable";
   src: url("../../public/font/Satoshi-Black.woff") format("woff");
-  font-weight: 200;
   /* Adjust as needed based on the font weights available */
 }
 
 body {
-  font-family: "Satoshi-Variable", sans-serif;
+  font-family: "Satoshi", sans-serif;
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
@@ -48,11 +48,6 @@ body {
   :root {
     --search-suggestion: 240, 6%, 10%, 0.4;
   }
-}
-
-/* styles.css */
-body {
-  font-family: "Satoshi Variable", sans-serif;
 }
 
 /* Header Styles */
@@ -80,13 +75,11 @@ header {
 }
 
 .description-color {
-  font-family: "Satoshi-variable", sans-serif;
   /* Change "actor" to the actual font name */
   color: #d1d5db;
 }
 
 .description-color:hover {
-  font-family: "Satoshi-Variable", sans-serif;
   /* Change "actor" to the actual font name */
   color: #ffffff;
 }

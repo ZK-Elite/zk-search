@@ -7,6 +7,8 @@ import {
   CarouselItem,
   CarouselNext,
 } from "../../components/ui/carousel";
+
+import { useRouter } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -41,6 +43,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
+  const router = useRouter();
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
@@ -140,6 +143,11 @@ export default function Page() {
       loadData();
     }
   }, [loadData, query]);
+
+  if (!query) {
+    router.push("/");
+  }
+
   return (
     <>
       <div
@@ -177,7 +185,9 @@ export default function Page() {
                       <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
                         Results
                       </p>
+
                       <RelevantLinks links={queryResult?.slice(0, 10)} />
+
                     </ScrollArea>
                   ) : (
                     <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[400px] flex justify-center items-center ">
@@ -207,7 +217,9 @@ export default function Page() {
                     </p>
                     <Carousel>
                       <CarouselContent>
+
                         {videoResult ? (
+
                           videoResult.map((video, index) => {
                             return (
                               video.image_token && (
@@ -221,10 +233,15 @@ export default function Page() {
                                     duration={video.duration}
                                     src={video.images.large}
                                     title={video.title}
+
+
+                                    publisher={video.publisher}
+
                                   />
                                 </CarouselItem>
                               )
                             );
+
                           })
                         ) : (
                           <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
@@ -245,6 +262,7 @@ export default function Page() {
                             No results found
                           </div>
                         )}
+
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -264,7 +282,9 @@ export default function Page() {
                     </p>
                     <Carousel>
                       <CarouselContent>
+
                         {newsResult ? (
+
                           newsResult.map((news, index) => {
                             return (
                               news.title && (
@@ -282,6 +302,7 @@ export default function Page() {
                                 </CarouselItem>
                               )
                             );
+
                           })
                         ) : (
                           <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
@@ -302,6 +323,7 @@ export default function Page() {
                             No results found
                           </div>
                         )}
+
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
