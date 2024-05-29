@@ -210,7 +210,7 @@ export default function Page() {
                       {newsResult && newsResult.map((news, index) => {
                         return (
                           news.title && (
-                            <>
+                            <div key={index}>
                               <div
                                 ref={el => {
                                   if (el) newsRefs.current[index] = el;
@@ -225,7 +225,7 @@ export default function Page() {
                                   source={news.source}
                                 />
                               </div>
-                            </>
+                            </div>
                           )
                         );
                       })}

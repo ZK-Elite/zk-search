@@ -52,68 +52,18 @@ export default function Page() {
 
       setPending(true);
 
-      fetchData("/api/venice", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query }),
-      }).then((venisData) => {
-        setPending(false);
-        setSummaryResult(venisData.data)
-      }).catch((err) => {
-        console.error("Error fetching Venice data")
-      });
-
       const apiCalls = [
-        fetchData("/api/query", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            keywords: query,
-          }),
-        }),
-        fetchData("/api/suggest", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
-        }),
-        fetchData("/api/image", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            keywords: query,
-            max_results: 11
-          }),
-        }),
         fetchData("/api/video", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keywords: query,
+            result: 20
           }),
-        }),
-        fetchData("/api/news", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            keywords: query,
-          }),
-        }),
-        fetchData("/api/ads/fetch", {
-          method: "GET",
-          headers: { "Content-Type": "application/json" },
         }),
       ];
-
-      const [queryData, suggestionData, imageData, videoData, newsData, adData] = await Promise.all(apiCalls);
-
-      const hrefArray = queryData.data?.map((item: any) => item.href);
-      setVeniceUrlResult(hrefArray);
-      setQueryResult(queryData.data);
-      setSuggest(suggestionData.data);
-      setImageResult(imageData.data);
+      const [videoData] = await Promise.all(apiCalls);
       setVideoResult(videoData.data);
-      setNewsResult(newsData.data);
-      setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -130,9 +80,9 @@ export default function Page() {
   const videoRefs = useRef<HTMLDivElement[]>([]);
   const [maxHeight, setMaxHeight] = useState(0);
   useEffect(() => {
-    // Calculate the maximum height after all components are rendered
     const heights = videoRefs.current.map(ref => ref ? ref.offsetHeight : 0);
-    setMaxHeight(Math.max(...heights));
+    const validHeights = heights.filter(height => height > 0 && height < 300)
+    setMaxHeight(Math.max(...validHeights));
   }, [videoResult]);
   
   return (
@@ -170,7 +120,7 @@ export default function Page() {
                       {videoResult && videoResult.map((video, index) => {
                         return (
                           video.image_token && (
-                            <>
+                            <div key={index}>
                               <div
                                 ref={el => {
                                   if (el) videoRefs.current[index] = el;
@@ -185,7 +135,7 @@ export default function Page() {
                                   title={video.title}
                                 />
                               </div>
-                            </>
+                            </div>
                           )
                         );
                       })}
@@ -194,128 +144,6 @@ export default function Page() {
                 </>
               )}
             </div>
-          </div>
-
-          <div className="flex-auto w-full xl:w-5/12">
-            <span className="absolute right-20 mt-[-12px] z-30 text-white dark:text-black py-[2px] px-[10px] border border-white dark:border-[#27272a] rounded-[21px] text-[10px] bg-[#222729] dark:bg-[#fff] font-bold">Ad</span>
-            <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden relative">
-              {loading ? (
-                <div className="justify-around">
-                  <Skeleton className="w-full h-[13vh] rounded-3xl" />
-                </div>
-              ) : (
-                <>
-                  {ad?.length > 0 && (
-                    <div className="flex w-full h-full">
-                      <AdsCard
-                        imgUrl={ad[0].image}
-                        title={ad[0].title}
-                        url={ad[0].url}
-                      />
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-            <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 rounded-2xl content-group-right1 overflow-hidden">
-              {pending ? (
-                <div className="flex items-center justify-between py-6 px-4 min-w-screen">
-                  <div className="w-2/12">
-                    <Image
-                      width={30}
-                      height={30}
-                      src={logoImg}
-                      alt="LOGO"
-                      priority
-                    />
-                  </div>
-                  <div className="w-10/12 flex items-center justify-center space-x-3">
-                    {[...Array(12)].map((_, i) => (
-                      <span
-                        key={i}
-                        className={`dot bg-[#38E5FF] rounded-full w-2.5 h-2.5`}
-                        style={{
-                          animation: `dot-carousel-loader 1s linear infinite`,
-                          animationDelay: `${i * 0.2}s`,
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-              ) : (
-                <>
-                  {summaryResult && queryResult && (
-                    <Summary
-                      description={summaryResult}
-                      urls={veniceUrlResult ?? []}
-                    />
-                  )}
-                </>
-              )
-              }
-            </div>
-            {imageResult && (
-              <div
-                className="dark:bg-[#d3e8eba1] bg-[#121e22] max-md:pr-9 mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden "
-              >
-                <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Images</p>
-                <div className="content-group-video max-md:p-2">
-                  {loading ? (
-                    <div className="flex flex-row justify-around">
-                      <Skeleton className="h-[15vh] w-[10vw]" />
-                      <Skeleton className="h-[15vh] w-[10vw]" />
-                      <Skeleton className="h-[15vh] w-[10vw]" />
-                    </div>
-                  ) : (
-                    <>
-                      <div>
-                        <div className="grid grid-cols-5 gap-2">
-                          {imageResult.slice(0, 11).map((image, index) => {
-                            return (
-                              image.image && (
-                                <ImageCard
-                                  key={index}
-                                  imageUrl={image.image}
-                                  url={image.url}
-                                />
-                              )
-                            );
-                          })}
-                        </div>
-                        <div className="w-full flex justify-center items-center mt-3">
-                          <button className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5">
-                            More Images
-                            <ChevronRight className="h-6 w-6" />
-                          </button>
-                        </div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </div>
-            )}
-            <ScrollArea
-              className="dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl p-4 pr-0 content-group-right-first content-group-right2 overflow-hidden flex justify-center"
-            >
-              {loading ? (
-                <div className="flex flex-row justify-around">
-                  <Skeleton className="h-[5vh] w-[10vw]" />
-                  <Skeleton className="h-[5vh] w-[10vw]" />
-                  <Skeleton className="h-[5vh] w-[10vw]" />
-                </div>
-              ) : (
-                <>
-                  {suggest &&
-                    suggest.map((sug, index) => (
-                      <RelatedLink
-                        key={index}
-                        link={"/search?q=" + sug}
-                        query={sug}
-                      />
-                    ))}
-                </>
-              )}
-            </ScrollArea>
           </div>
         </div>
       </div >
