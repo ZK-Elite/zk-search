@@ -6,7 +6,8 @@ import {
   CarouselContent,
   CarouselItem,
   CarouselNext,
-} from "../../components/ui/carousel"
+} from "../../components/ui/carousel";
+import { useRouter } from "next/navigation";
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
@@ -21,7 +22,12 @@ import { Adtype } from "../../data/types";
 import NewsCard from "@/src/components/news";
 import logoImg from "../../../public/logo.svg";
 import ImageCard from "@/src/components/image";
-import { ImageTypes, NewsTypes, QueryTypes, VideoTypes } from "@/src/data/search-types";
+import {
+  ImageTypes,
+  NewsTypes,
+  QueryTypes,
+  VideoTypes,
+} from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
@@ -36,11 +42,14 @@ export default function Page() {
   const [loading, setLoading] = useState(true);
   const [pending, setPending] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
+  const router = useRouter();
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
     if (!response.ok) {
-      throw new Error(`Failed to fetch data from server: ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch data from server: ${response.statusText}`
+      );
     }
     return await response.json();
   }, []);
@@ -48,19 +57,20 @@ export default function Page() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
-
       setPending(true);
 
       fetchData("/api/venice", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ query }),
-      }).then((venisData) => {
-        setPending(false);
-        setSummaryResult(venisData.data)
-      }).catch((err) => {
-        console.error("Error fetching Venice data")
-      });
+      })
+        .then((venisData) => {
+          setPending(false);
+          setSummaryResult(venisData.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching Venice data");
+        });
 
       const apiCalls = [
         fetchData("/api/query", {
@@ -80,7 +90,7 @@ export default function Page() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             keywords: query,
-            max_results: 11
+            max_results: 11,
           }),
         }),
         fetchData("/api/video", {
@@ -103,7 +113,14 @@ export default function Page() {
         }),
       ];
 
-      const [queryData, suggestionData, imageData, videoData, newsData, adData] = await Promise.all(apiCalls);
+      const [
+        queryData,
+        suggestionData,
+        imageData,
+        videoData,
+        newsData,
+        adData,
+      ] = await Promise.all(apiCalls);
 
       const hrefArray = queryData.data?.map((item: any) => item.href);
       setVeniceUrlResult(hrefArray);
@@ -125,9 +142,18 @@ export default function Page() {
       loadData();
     }
   }, [loadData, query]);
+
+  if (!query) {
+    router.push("/");
+  }
+
   return (
     <>
-      <div className={`flex flex-col items-center md:space-auto space-y-2 ${loading && !queryResult ? 'h-screen' : ''}`}>
+      <div
+        className={`flex flex-col items-center md:space-auto space-y-2 ${
+          loading && !queryResult ? "h-screen" : ""
+        }`}
+      >
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl content-group-right-first ">
@@ -155,7 +181,9 @@ export default function Page() {
 
                   {queryResult && (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
-                      <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Results</p>
+                      <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                        Results
+                      </p>
                       <RelevantLinks links={queryResult.slice(0, 10)} />
                     </ScrollArea>
                   )}
@@ -163,24 +191,31 @@ export default function Page() {
                   {/* ---------------- video ---------------- */}
 
                   <div className="mt-8">
-                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">Videos</p>
+                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                      Videos
+                    </p>
                     <Carousel>
                       <CarouselContent>
-                        {videoResult && videoResult.map((video, index) => {
-                          return (
-                            video.image_token && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <VideoCard
-                                  content={video.content}
-                                  description={video.description}
-                                  duration={video.duration}
-                                  src={video.images.large}
-                                  title={video.title}
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
+                        {videoResult &&
+                          videoResult.map((video, index) => {
+                            return (
+                              video.image_token && (
+                                <CarouselItem
+                                  className="md:basis-1/2 lg:basis-[31%] items-stretch"
+                                  key={index}
+                                >
+                                  <VideoCard
+                                    content={video.content}
+                                    description={video.description}
+                                    duration={video.duration}
+                                    src={video.images.large}
+                                    title={video.title}
+                                    publisher={video.publisher}
+                                  />
+                                </CarouselItem>
+                              )
+                            );
+                          })}
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -195,24 +230,30 @@ export default function Page() {
                   {/* ---------------- News ---------------- */}
 
                   <div className="mt-8">
-                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">News</p>
+                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                      News
+                    </p>
                     <Carousel>
                       <CarouselContent>
-                        {newsResult && newsResult.map((news, index) => {
-                          return (
-                            news.title && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <NewsCard
-                                  newsUrl={news.url}
-                                  title={news.title}
-                                  image={news.image}
-                                  date={news.date}
-                                  source={news.source}
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
+                        {newsResult &&
+                          newsResult.map((news, index) => {
+                            return (
+                              news.title && (
+                                <CarouselItem
+                                  className="md:basis-1/2 lg:basis-[31%] items-stretch"
+                                  key={index}
+                                >
+                                  <NewsCard
+                                    newsUrl={news.url}
+                                    title={news.title}
+                                    image={news.image}
+                                    date={news.date}
+                                    source={news.source}
+                                  />
+                                </CarouselItem>
+                              )
+                            );
+                          })}
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -228,8 +269,13 @@ export default function Page() {
 
                   {queryResult && (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
-                      <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">More Results</p>
-                      <RelevantLinks links={queryResult.slice(-10)} type="more" />
+                      <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">
+                        More Results
+                      </p>
+                      <RelevantLinks
+                        links={queryResult.slice(-10)}
+                        type="more"
+                      />
                     </ScrollArea>
                   )}
                 </>
@@ -238,7 +284,9 @@ export default function Page() {
           </div>
 
           <div className="flex-auto w-full xl:w-5/12">
-            <span className="absolute right-20 mt-[-12px] z-30 text-white dark:text-black py-[2px] px-[10px] border border-white dark:border-[#27272a] rounded-[21px] text-[10px] bg-[#222729] dark:bg-[#fff] font-bold">Ad</span>
+            <span className="absolute right-20 mt-[-12px] z-30 text-white dark:text-black py-[2px] px-[10px] border border-white dark:border-[#27272a] rounded-[21px] text-[10px] bg-[#222729] dark:bg-[#fff] font-bold">
+              Ad
+            </span>
             <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden relative">
               {loading ? (
                 <div className="justify-around">
@@ -292,14 +340,13 @@ export default function Page() {
                     />
                   )}
                 </>
-              )
-              }
+              )}
             </div>
             {imageResult && (
-              <div
-                className="dark:bg-[#d3e8eba1] bg-[#121e22] max-md:pr-9 mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden "
-              >
-                <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Images</p>
+              <div className="dark:bg-[#d3e8eba1] bg-[#121e22] max-md:pr-9 mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden ">
+                <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                  Images
+                </p>
                 <div className="content-group-video max-md:p-2">
                   {loading ? (
                     <div className="flex flex-row justify-around">
@@ -335,9 +382,7 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <ScrollArea
-              className="dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl p-4 pr-0 content-group-right-first content-group-right2 overflow-hidden flex justify-center"
-            >
+            <ScrollArea className="dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl p-4 pr-0 content-group-right-first content-group-right2 overflow-hidden flex justify-center">
               {loading ? (
                 <div className="flex flex-row justify-around">
                   <Skeleton className="h-[5vh] w-[10vw]" />
@@ -359,7 +404,7 @@ export default function Page() {
             </ScrollArea>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }

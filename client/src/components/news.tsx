@@ -1,5 +1,6 @@
 import Image from "next/image";
 import React from "react";
+import Link from "next/link";
 import { NewsTypes } from "../data/search-types";
 import { timeAgo } from "../hook/useTimeAgo";
 
@@ -34,10 +35,10 @@ const NewsCard: React.FC<NewsCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-3 items-stretch h-full justify-between gap-2">
-      <a href={newsUrl} className="w-full">
+    <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-3 items-stretch h-full justify-between gap-3 hover:scale-[.98] cursor-pointer transition-transform duration-300">
+      <Link href={newsUrl} className="w-full">
         <Image
-          className="w-full md:h-[120px] rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
+          className="w-full md:h-40 rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
           loader={customLoader}
           src={!image ? "images/icons/placeholder-img.svg" : image}
           alt={title}
@@ -46,13 +47,13 @@ const NewsCard: React.FC<NewsCardProps> = ({
           onError={handleNewsError}
           unoptimized
         />
-      </a>
-      <p className="text-base font-medium leading-5 text-white dark:text-black">
+      </Link>
+      <p className="text-base font-medium leading-5 text-white dark:text-black line-clamp-2">
         {title}
       </p>
       <div className="flex flex-row justify-between items-center">
-        <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">
-          {source?.length > 25 ? source.slice(0, 25) + "..." : source}
+        <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black line-clamp-1">
+          {source}
         </p>
         <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">
           {timeAgo(date)}
