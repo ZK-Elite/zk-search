@@ -150,7 +150,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="flex flex-col items-center md:space-auto space-y-2 h-screen">
+      <div className="flex flex-col items-center md:space-auto space-y-2 min-h-screen">
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl content-group-right-first ">
@@ -183,7 +183,6 @@ export default function Page() {
                       </p>
 
                       <RelevantLinks links={queryResult?.slice(0, 10)} />
-
                     </ScrollArea>
                   ) : (
                     <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[400px] flex justify-center items-center ">
@@ -213,9 +212,7 @@ export default function Page() {
                     </p>
                     <Carousel>
                       <CarouselContent>
-
                         {videoResult ? (
-
                           videoResult.map((video, index) => {
                             return (
                               video.image_token && (
@@ -229,15 +226,11 @@ export default function Page() {
                                     duration={video.duration}
                                     src={video.images.large}
                                     title={video.title}
-
-
                                     publisher={video.publisher}
-
                                   />
                                 </CarouselItem>
                               )
                             );
-
                           })
                         ) : (
                           <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
@@ -258,7 +251,6 @@ export default function Page() {
                             No results found
                           </div>
                         )}
-
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -278,9 +270,7 @@ export default function Page() {
                     </p>
                     <Carousel>
                       <CarouselContent>
-
                         {newsResult ? (
-
                           newsResult.map((news, index) => {
                             return (
                               news.title && (
@@ -298,7 +288,6 @@ export default function Page() {
                                 </CarouselItem>
                               )
                             );
-
                           })
                         ) : (
                           <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
@@ -319,7 +308,6 @@ export default function Page() {
                             No results found
                           </div>
                         )}
-
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>

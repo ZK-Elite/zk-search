@@ -67,13 +67,13 @@ export default function Page() {
   };
   return (
     <>
-      <div className="flex flex-col items-center md:space-auto space-y-2 h-screen">
+      <div className="flex flex-col items-center md:space-auto space-y-2 min-h-screen">
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 rounded-2xl content-group-right-first ">
               {loading ? (
                 <Tile>
-                  {Array.from({ length: 8 }).map((_, index) => (
+                  {Array.from({ length: 10 }).map((_, index) => (
                     <div
                       key={index}
                       className="bg-[#121e22] dark:bg-[#d3e8eba1] flex flex-col gap-4 rounded-2xl p-4"
@@ -88,30 +88,29 @@ export default function Page() {
                 </Tile>
               ) : (
                 <>
-                  <div className="mt-8 mb-12">
-                    <Tile>
-                      {newsResult &&
-                        newsResult.map((news, index) => {
-                          return (
-                            news.title &&
-                            news.image && (
-                              <div
-                                className="md:basis-1/2 lg:basis-[19%] items-center"
-                                key={index}
-                              >
-                                <NewsCard
-                                  newsUrl={news.url}
-                                  title={news.title}
-                                  image={news.image}
-                                  date={news.date}
-                                  source={news.source}
-                                />
-                              </div>
-                            )
-                          );
-                        })}
-                    </Tile>
-                  </div>
+                  <Tile>
+                    {newsResult &&
+                      newsResult.map((news, index) => {
+                        return (
+                          news.title &&
+                          news.image && (
+                            <div
+                              className="md:basis-1/2 lg:basis-[19%] items-center"
+                              key={index}
+                            >
+                              <NewsCard
+                                newsUrl={news.url}
+                                title={news.title}
+                                image={news.image}
+                                date={news.date}
+                                source={news.source}
+                              />
+                            </div>
+                          )
+                        );
+                      })}
+                  </Tile>
+
                   {/* <div className="w-full flex justify-center items-center mt-9">
                     <button
                       onClick={handleLoadMore}

@@ -65,11 +65,7 @@ export default function Page() {
 
   return (
     <>
-      <div
-        className={`flex flex-col items-center md:space-auto space-y-2 ${
-          loading && !queryResult ? "h-screen" : ""
-        }`}
-      >
+      <div className="flex flex-col items-center md:space-auto space-y-2 min-h-screen">
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="w-full grid">
             <div className="p-4  rounded-2xl content-group-right-first ">
@@ -89,7 +85,7 @@ export default function Page() {
                   ))}
                 </Tile>
               ) : (
-                <div className="mt-8">
+                <div>
                   <Tile>
                     {videoResult &&
                       videoResult.map((video, index) => {
