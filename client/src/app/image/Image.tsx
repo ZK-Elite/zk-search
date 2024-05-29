@@ -13,7 +13,7 @@ export const GalleryImage = <T extends ImageExtended>({
 }: ImageProps<T>): JSX.Element => {
   const styleContext = { item };
 
-  const style = getStyle(thumbnailStyle, styles.thumbnail, styleContext)
+  const style = getStyle(thumbnailStyle, styles.thumbnail, styleContext);
   const thumbnailProps = {
     key: index,
     "data-testid": "grid-gallery-item_thumbnail",
@@ -21,18 +21,18 @@ export const GalleryImage = <T extends ImageExtended>({
     alt: item.alt ? item.alt : "",
     width: style.width as number,
     height: style.height as number,
-    style: style
+    style: style,
   };
 
   const extractDomain = (url: string | undefined): string => {
     try {
-      if (!url) return ''
+      if (!url) return "";
       const parsedUrl = new URL(url);
       return parsedUrl.hostname;
     } catch (e) {
-      return '';
+      return "";
     }
-  }
+  };
 
   return (
     <div
@@ -47,12 +47,18 @@ export const GalleryImage = <T extends ImageExtended>({
       >
         <div className="flex flex-col rounded-xl overflow-hidden bg-transparent">
           <Link href={item.src} className="w-full">
-            <Image {...thumbnailProps} className="rounded-lg md:hover:scale-[1.1] hover:transition-all object-cover aspect-square" />
+            <Image
+              {...thumbnailProps}
+              className="rounded-lg md:hover:scale-[1.1] transition-transform duration-300 object-cover aspect-square"
+              alt={"img"}
+            />
           </Link>
         </div>
         <div className="text-gray-300 whitespace-nowrap mt-3">
           <p className="text-md">{item.title}</p>
-          <Link href={item.url as string} className="text-sm">{extractDomain(item.url)}</Link>
+          <Link href={item.url as string} className="text-sm">
+            {extractDomain(item.url)}
+          </Link>
         </div>
       </div>
     </div>

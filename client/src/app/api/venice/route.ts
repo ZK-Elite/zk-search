@@ -15,7 +15,6 @@ export async function POST(req: Request) {
     }
 
     const result_venice = await ChatByVenice(query);
-
     if (result_venice.status === 200) {
       return result_venice;
     } else {
@@ -75,7 +74,8 @@ async function ChatByVenice(q: string) {
       data: veniceData,
     });
   } catch (error) {
-    return NextResponse.json({ error: error }, { status: 500 });
+    console.error("Error proxying request to Venice API:", error);
+    return NextResponse.json({ error }, { status: 500 });
   }
 }
 async function ChatByGroq(q: string) {
@@ -83,7 +83,6 @@ async function ChatByGroq(q: string) {
     const groq = new Groq({
       apiKey: process.env.GROQ_API_KEY,
     });
-
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         {
@@ -100,7 +99,7 @@ async function ChatByGroq(q: string) {
       data: chatCompletion.choices[0].message.content,
     });
   } catch (error) {
-    console.error("Error proxying request AI Model:", error);
-    return NextResponse.json({ error: error }, { status: 500 });
+    console.error("Error proxying request to AI model:", error);
+    return NextResponse.json({ error }, { status: 500 });
   }
 }
