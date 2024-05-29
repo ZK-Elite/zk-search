@@ -3,6 +3,7 @@ import * as styles from "./styles";
 import { getStyle } from "./styles";
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 
 export const GalleryImage = <T extends ImageExtended>({
   item,
@@ -34,7 +35,14 @@ export const GalleryImage = <T extends ImageExtended>({
     }
   }
 
+  const [hasError, setHasError] = useState(false);
+
+  const handleError = () => {
+    setHasError(true);
+  };
+
   return (
+    hasError ? <></>: 
     <div
       className="ReactGridGallery_tile overflow-hidden"
       data-testid="grid-gallery-item"
@@ -47,10 +55,10 @@ export const GalleryImage = <T extends ImageExtended>({
       >
         <div className="flex flex-col rounded-xl overflow-hidden bg-transparent">
           <Link href={item.src} className="w-full">
-            <Image {...thumbnailProps} className="rounded-lg md:hover:scale-[1.1] hover:transition-all object-cover aspect-square" />
+            <Image {...thumbnailProps} className="rounded-lg md:hover:scale-[1.1] hover:transition-all object-cover aspect-square" onError={handleError}/>
           </Link>
         </div>
-        <div className="text-gray-300 whitespace-nowrap mt-3">
+        <div className="text-gray-300 dark:text-gray-700 whitespace-nowrap mt-3">
           <p className="text-md">{item.title}</p>
           <Link href={item.url as string} className="text-sm">{extractDomain(item.url)}</Link>
         </div>
