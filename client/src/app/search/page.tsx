@@ -1,8 +1,16 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+} from "../../components/ui/carousel";
+import { useRouter } from "next/navigation";
+import { ChevronRight } from "lucide-react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import { GoogleSearchResponse } from "../../data/googletypes";
 import Summary from "../../components/summary";
 import RelevantLinks from "../../components/relevantlinks";
 import RelatedLink from "../../components/relatedlink";
@@ -11,33 +19,37 @@ import { ScrollArea } from "../../components/ui/scroll-area";
 import { Skeleton } from "../../components/ui/skeleton";
 import AdsCard from "../../components/AdsCard";
 import { Adtype } from "../../data/types";
-import Image from "next/image";
+import NewsCard from "@/src/components/news";
 import logoImg from "../../../public/logo.svg";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-} from "../../components/ui/carousel"
-import { ChevronRight } from "lucide-react";
 import ImageCard from "@/src/components/image";
-import { sampleSuggests } from "@/src/data/contant";
-
+import {
+  ImageTypes,
+  NewsTypes,
+  QueryTypes,
+  VideoTypes,
+} from "@/src/data/search-types";
 
 export default function Page() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q");
-  const [result, setResult] = useState<GoogleSearchResponse>();
-  const [videoResult, setVideoResult] = useState<GoogleSearchResponse>();
-  const [veniceResult, setVeniceResult] = useState<string>();
-  const [suggest, setSuggest] = useState<string[]>(sampleSuggests);
+  const [queryResult, setQueryResult] = useState<QueryTypes[]>();
+  const [suggest, setSuggest] = useState<string[]>();
+  const [imageResult, setImageResult] = useState<ImageTypes[]>();
+  const [videoResult, setVideoResult] = useState<VideoTypes[]>();
+  const [newsResult, setNewsResult] = useState<NewsTypes[]>();
+  const [veniceUrlResult, setVeniceUrlResult] = useState<[]>();
+  const [summaryResult, setSummaryResult] = useState<string>();
   const [loading, setLoading] = useState(true);
+  const [pending, setPending] = useState(true);
   const [ad, setAd] = useState<Adtype[]>([]);
+  const router = useRouter();
 
   const fetchData = useCallback(async (endpoint: any, options: any) => {
     const response = await fetch(endpoint, options);
     if (!response.ok) {
-      throw new Error(`Failed to fetch data from server: ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch data from server: ${response.statusText}`
+      );
     }
     return await response.json();
   }, []);
@@ -45,38 +57,78 @@ export default function Page() {
   const loadData = useCallback(async () => {
     setLoading(true);
     try {
+      setPending(true);
+
+      fetchData("/api/venice", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query }),
+      })
+        .then((venisData) => {
+          setPending(false);
+          setSummaryResult(venisData.data);
+        })
+        .catch((err) => {
+          console.error("Error fetching Venice data");
+        });
+
       const apiCalls = [
-        fetchData("/api/google", {
+        fetchData("/api/query", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query }),
-        }),
-        fetchData("/api/google", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query, site: "youtube.com" }),
+          body: JSON.stringify({
+            keywords: query,
+          }),
         }),
         fetchData("/api/suggest", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ query }),
         }),
-        // fetchData("/api/venice", {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ query }),
-        // }),
+        fetchData("/api/image", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            keywords: query,
+            max_results: 11,
+          }),
+        }),
+        fetchData("/api/video", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            keywords: query,
+          }),
+        }),
+        fetchData("/api/news", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            keywords: query,
+          }),
+        }),
         fetchData("/api/ads/fetch", {
           method: "GET",
           headers: { "Content-Type": "application/json" },
         }),
       ];
-      const [googleData, googleVideoData, suggestionData, adData] = await Promise.all(apiCalls);
 
-      setResult(googleData.data);
-      setVideoResult(googleVideoData.data);
+      const [
+        queryData,
+        suggestionData,
+        imageData,
+        videoData,
+        newsData,
+        adData,
+      ] = await Promise.all(apiCalls);
+
+      const hrefArray = queryData.data?.map((item: any) => item.href);
+      setVeniceUrlResult(hrefArray);
+      setQueryResult(queryData.data);
       setSuggest(suggestionData.data);
-      // setVeniceResult(veniceData.data);
+      setImageResult(imageData.data);
+      setVideoResult(videoData.data);
+      setNewsResult(newsData.data);
       setAd(adData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -91,9 +143,17 @@ export default function Page() {
     }
   }, [loadData, query]);
 
+  if (!query) {
+    router.push("/");
+  }
+
   return (
     <>
-      <div className="flex flex-col items-center md:space-auto space-y-2">
+      <div
+        className={`flex flex-col items-center md:space-auto space-y-2 ${
+          loading && !queryResult ? "h-screen" : ""
+        }`}
+      >
         <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl content-group-right-first ">
@@ -119,33 +179,43 @@ export default function Page() {
                 <>
                   {/* --------------- relevant links --------------- */}
 
-                  {result && (
+                  {queryResult && (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
-                      <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Results</p>
-                      <RelevantLinks links={result.items.slice(0, 4)} />
+                      <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                        Results
+                      </p>
+                      <RelevantLinks links={queryResult.slice(0, 10)} />
                     </ScrollArea>
                   )}
 
                   {/* ---------------- video ---------------- */}
 
                   <div className="mt-8">
-                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">Videos</p>
+                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                      Videos
+                    </p>
                     <Carousel>
                       <CarouselContent>
-                        {videoResult && videoResult.items.map((video, index) => {
-                          return (
-                            video.pagemap?.cse_image && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <VideoCard
-                                  videoUrl={video.pagemap.cse_image[0].src}
-                                  title={video.title}
-                                  url={video.link}
-                                  site="Youtube"
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
+                        {videoResult &&
+                          videoResult.map((video, index) => {
+                            return (
+                              video.image_token && (
+                                <CarouselItem
+                                  className="md:basis-1/2 lg:basis-[31%] items-stretch"
+                                  key={index}
+                                >
+                                  <VideoCard
+                                    content={video.content}
+                                    description={video.description}
+                                    duration={video.duration}
+                                    src={video.images.large}
+                                    title={video.title}
+                                    publisher={video.publisher}
+                                  />
+                                </CarouselItem>
+                              )
+                            );
+                          })}
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -160,23 +230,30 @@ export default function Page() {
                   {/* ---------------- News ---------------- */}
 
                   <div className="mt-8">
-                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">News</p>
+                    <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                      News
+                    </p>
                     <Carousel>
                       <CarouselContent>
-                        {result && result.items.map((news, index) => {
-                          return (
-                            news.pagemap?.cse_image && (
-                              <CarouselItem className="md:basis-1/2 lg:basis-[31%] items-stretch" key={index}>
-                                <VideoCard
-                                  videoUrl={news.pagemap.cse_image[0].src}
-                                  title={news.title}
-                                  url={news.link}
-                                  site="News"
-                                />
-                              </CarouselItem>
-                            )
-                          );
-                        })}
+                        {newsResult &&
+                          newsResult.map((news, index) => {
+                            return (
+                              news.title && (
+                                <CarouselItem
+                                  className="md:basis-1/2 lg:basis-[31%] items-stretch"
+                                  key={index}
+                                >
+                                  <NewsCard
+                                    newsUrl={news.url}
+                                    title={news.title}
+                                    image={news.image}
+                                    date={news.date}
+                                    source={news.source}
+                                  />
+                                </CarouselItem>
+                              )
+                            );
+                          })}
                       </CarouselContent>
                       <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
                     </Carousel>
@@ -190,10 +267,15 @@ export default function Page() {
 
                   {/* --------------- relevant links --------------- */}
 
-                  {result && (
+                  {queryResult && (
                     <ScrollArea className="rounded-2xl content-group-right-first content-group-right2 overflow-hidden">
-                      <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">More Results</p>
-                      <RelevantLinks links={result.items.slice(0, 4)} />
+                      <p className="mt-4 mb-4 text-xl text-white dark:text-black font-semibold leading-6">
+                        More Results
+                      </p>
+                      <RelevantLinks
+                        links={queryResult.slice(-10)}
+                        type="more"
+                      />
                     </ScrollArea>
                   )}
                 </>
@@ -202,7 +284,9 @@ export default function Page() {
           </div>
 
           <div className="flex-auto w-full xl:w-5/12">
-            <span className="absolute right-20 mt-[-12px] z-30 text-white dark:text-black py-[2px] px-[10px] border border-white dark:border-[#27272a] rounded-[21px] text-[10px] bg-[#222729] dark:bg-[#fff] font-bold">Ad</span>
+            <span className="absolute right-20 mt-[-12px] z-30 text-white dark:text-black py-[2px] px-[10px] border border-white dark:border-[#27272a] rounded-[21px] text-[10px] bg-[#222729] dark:bg-[#fff] font-bold">
+              Ad
+            </span>
             <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden relative">
               {loading ? (
                 <div className="justify-around">
@@ -210,7 +294,7 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  {ad.length > 0 && (
+                  {ad?.length > 0 && (
                     <div className="flex w-full h-full">
                       <AdsCard
                         imgUrl={ad[0].image}
@@ -223,7 +307,7 @@ export default function Page() {
               )}
             </div>
             <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 rounded-2xl content-group-right1 overflow-hidden">
-              {loading ? (
+              {pending ? (
                 <div className="flex items-center justify-between py-6 px-4 min-w-screen">
                   <div className="w-2/12">
                     <Image
@@ -249,21 +333,20 @@ export default function Page() {
                 </div>
               ) : (
                 <>
-                  {(
+                  {summaryResult && queryResult && (
                     <Summary
-                      description={veniceResult}
-                      urls={Array.isArray(result?.items) ? result.items : []}
+                      description={summaryResult}
+                      urls={veniceUrlResult ?? []}
                     />
                   )}
                 </>
-              )
-              }
+              )}
             </div>
-            {result && result.items && (
-              <div
-                className="dark:bg-[#d3e8eba1] bg-[#121e22] max-md:pr-9 mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden "
-              >
-                <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">Images</p>
+            {imageResult && (
+              <div className="dark:bg-[#d3e8eba1] bg-[#121e22] max-md:pr-9 mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden ">
+                <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
+                  Images
+                </p>
                 <div className="content-group-video max-md:p-2">
                   {loading ? (
                     <div className="flex flex-row justify-around">
@@ -275,13 +358,13 @@ export default function Page() {
                     <>
                       <div>
                         <div className="grid grid-cols-5 gap-2">
-                          {result.items.slice(0, 11).map((image, index) => {
+                          {imageResult.slice(0, 11).map((image, index) => {
                             return (
-                              image.pagemap?.cse_image && (
+                              image.image && (
                                 <ImageCard
                                   key={index}
-                                  imageUrl={image.pagemap.cse_image[0].src}
-                                  url={image.link}
+                                  imageUrl={image.image}
+                                  url={image.url}
                                 />
                               )
                             );
@@ -299,9 +382,7 @@ export default function Page() {
                 </div>
               </div>
             )}
-            <ScrollArea
-              className="dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl p-4 pr-0 content-group-right-first content-group-right2 overflow-hidden flex justify-center"
-            >
+            <ScrollArea className="dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl p-4 pr-0 content-group-right-first content-group-right2 overflow-hidden flex justify-center">
               {loading ? (
                 <div className="flex flex-row justify-around">
                   <Skeleton className="h-[5vh] w-[10vw]" />
@@ -323,7 +404,7 @@ export default function Page() {
             </ScrollArea>
           </div>
         </div>
-      </div >
+      </div>
     </>
   );
 }

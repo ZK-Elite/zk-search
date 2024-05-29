@@ -1,13 +1,11 @@
 import Image from "next/image";
 import React from "react";
-import Link from "next/link";
+
 interface VideoCardProps {
-  content: string;
-  description: string;
-  src: string;
-  duration: string;
+  videoUrl: string;
   title: string;
-  publisher: string;
+  url: string;
+  site: string;
 }
 interface CustomLoaderProps {
   src: string;
@@ -19,13 +17,11 @@ const customLoader = ({ src }: CustomLoaderProps) => {
   return src;
 };
 
-const VideoCard: React.FC<VideoCardProps> = ({
-  content,
-  description,
-  src,
-  duration,
-  publisher,
+const NewsVideoCard: React.FC<VideoCardProps> = ({
+  videoUrl,
   title,
+  url,
+  site,
 }) => {
   const [error, setError] = React.useState(false);
 
@@ -34,32 +30,32 @@ const VideoCard: React.FC<VideoCardProps> = ({
   };
 
   return (
-    <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#20292d] rounded-xl p-3 items-stretch h-full justify-between gap-3 hover:scale-[.98] cursor-pointer transition-transform duration-300">
-      <Link href={content} className="w-full">
+    <div className="flex flex-col dark:bg-[#d3e8eb] bg-[#081d26] rounded-xl p-3 items-stretch h-full justify-between gap-2">
+      <a href={url} className="w-full">
         <Image
-          className="w-full md:h-40 rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
+          className="w-full md:h-[160px] rounded-lg bg-cover ease-in-out hover:transition-all object-cover aspect-square"
           loader={customLoader}
-          src={error ? "images/icons/placeholder-img.svg" : src}
+          src={error ? "images/icons/placeholder-img.svg" : videoUrl}
           alt={title}
           width={500}
           height={500}
           onError={handleImgError}
           unoptimized
         />
-      </Link>
-      <p className="text-base font-medium leading-5 text-white dark:text-black line-clamp-2">
+      </a>
+      <p className="text-base font-medium leading-5 text-white dark:text-black">
         {title}
       </p>
       <div className="flex flex-row justify-between items-center">
         <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">
-          {publisher}
+          {site}
         </p>
         <p className="text-sm font-light leading-5 text-[#D1D5DB] dark:text-black">
-          {duration}
+          23/05/24
         </p>
       </div>
     </div>
   );
 };
 
-export default VideoCard;
+export default NewsVideoCard;

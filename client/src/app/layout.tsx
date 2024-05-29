@@ -1,13 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import React, { Suspense } from "react";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { Toaster } from "react-hot-toast";
 import { ThemeProvider } from "next-themes";
 
-const inter = Inter({ subsets: ["latin"] });
 const title = "zKSearch";
 const description =
   "zkSearch is a privacy-centric search engine crafted within the ZKML ecosystem, utilising established privacy-focused technologies while refraining from storing user data. It harnesses the power of venice ai and groq to deliver AI-driven search capabilities within the secure confines of the ZKML subnet, ensuring heightened levels of privacy and security.";
@@ -33,7 +31,7 @@ export const metadata: Metadata = {
     siteName: domain,
     images: [
       {
-        url: domain + "/og.png",
+        url: domain + "/og1.png",
         alt: "zkSearch",
       },
     ],
@@ -58,15 +56,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
+    <html lang="en" suppressHydrationWarning>
+      <body>
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
+          defaultTheme="dark"
           disableTransitionOnChange
         >
-          <div className="bg-[#00111A] dark:bg-[#E5FCFF] h-screen">
+          <div className="bg-[#00111A] dark:bg-[#E5FCFF]">
             <Suspense>
               <Header />
               {children}
