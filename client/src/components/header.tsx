@@ -29,7 +29,7 @@ const Header = () => {
       }`}
     >
       <div className={`flex w-full md:px-4 pt-6 items-center`}>
-        <div className="w-full items-center border-b border-[#27272A]">
+        <div className={`w-full items-center path ${pathname !== "/" && "border-b border-[#27272A]"}`}>
           {pathname !== "/" ? (
           <>
             <div className="flex items-center gap-7 justify-between">
