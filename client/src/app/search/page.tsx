@@ -155,7 +155,7 @@ export default function Page() {
   useEffect(() => {
     const interval = setInterval(() => {
       setAdIndex((prevIndex) => (ad.length > 0 ? (prevIndex + 1) % ad.length : 0));
-    }, 10000); // Change ad every 10 seconds
+    }, 15000); // Change ad every 10 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [ad]);
