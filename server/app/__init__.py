@@ -4,6 +4,7 @@ from werkzeug.exceptions import HTTPException, default_exceptions
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
 from flask_cors import CORS
+from app.controllers import initialize_resources
 
 app = Flask(__name__)
 CORS(app)
@@ -25,3 +26,5 @@ def handle_error(e):
 
 for ex in default_exceptions:
     app.register_error_handler(ex, handle_error)
+
+initialize_resources(app)
