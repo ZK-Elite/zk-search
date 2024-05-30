@@ -9,7 +9,7 @@ import { ThemeProvider } from "next-themes";
 const title = "zKSearch";
 const description =
   "zkSearch is a privacy-centric search engine crafted within the ZKML ecosystem, utilising established privacy-focused technologies while refraining from storing user data. It harnesses the power of venice ai and groq to deliver AI-driven search capabilities within the secure confines of the ZKML subnet, ensuring heightened levels of privacy and security.";
-const domain = process.env.DOMAIN || "";
+const NEXT_PUBLIC_BASE_URL = process.env.NEXT_PUBLIC_BASE_URL || "";
 
 export const metadata: Metadata = {
   title: title,
@@ -25,13 +25,13 @@ export const metadata: Metadata = {
   },
   openGraph: {
     type: "website",
-    url: domain,
+    url: NEXT_PUBLIC_BASE_URL,
     title: title,
     description: description,
-    siteName: domain,
+    siteName: NEXT_PUBLIC_BASE_URL,
     images: [
       {
-        url: domain + "/og1.png",
+        url: NEXT_PUBLIC_BASE_URL + "/og.png",
         alt: "zkSearch",
       },
     ],

@@ -33,7 +33,7 @@ export const GalleryImage = <T extends ImageExtended>({
     style: style,
   };
 
-  const extractDomain = (url: string | undefined): string => {
+  const extractNEXT_PUBLIC_BASE_URL = (url: string | undefined): string => {
     try {
       if (!url) return "";
       const parsedUrl = new URL(url);
@@ -76,7 +76,7 @@ export const GalleryImage = <T extends ImageExtended>({
         <div className="text-gray-300 dark:text-gray-700 whitespace-nowrap mt-3">
           <p className="text-md">{item.title}</p>
           <Link href={item.url as string} className="text-sm">
-            {extractDomain(item.url)}
+            {extractNEXT_PUBLIC_BASE_URL(item.url)}
           </Link>
         </div>
       </div>
