@@ -45,18 +45,6 @@ const Footer = () => {
           <Link href="https://www.zkml.systems/" rel="noopener noreferrer">
             <p className="mx-2 text-white dark:text-black">ZKML</p>
           </Link>
-          {/* <div className="pl-10">
-            <Link href="https://www.zkml.systems/" rel="noopener noreferrer">
-              <Image
-                width={32}
-                height={32}
-                src={"images/icons/zwap-2d.svg"}
-                className="footerImg ml-2 w-10"
-                alt="logoimg"
-                priority
-              />
-            </Link>
-          </div> */}
         </div>
         <div className=" flex">
           <a href="https://twitter.com/ZKMLsystems" rel="noopener noreferrer">
@@ -65,7 +53,7 @@ const Footer = () => {
               width={20}
               height={20}
               alt="twitter"
-              className="twitterIcon mr-4"
+              className="twitterIcon mr-4 w-5 h-5"
               style={{
                 filter:
                   theme === "dark"
@@ -81,7 +69,7 @@ const Footer = () => {
               height={20}
               src={"images/icons/telegram-out.svg"}
               alt="telegram"
-              className="telegramIcon mr-2"
+              className="telegramIcon mr-2 w-5 h-5"
               style={{
                 filter:
                   theme === "dark"
