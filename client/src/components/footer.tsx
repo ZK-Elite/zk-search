@@ -13,13 +13,13 @@ const Footer = () => {
 
   return (
     <footer
-      className={`w-full px-10  fixed bottom-0 bg-opacity-70 border-t border-[#27272A] ${
+      className={`w-full px-9  fixed bottom-0 bg-opacity-70 ${
         pathname !== "/" &&
         "backdrop-blur-xl bg-[#00111A] dark:bg-[#E5FCFF] max-sm:hidden "
       }`}
     >
       <div
-        className={`flex justify-center sm:justify-between items-center gap-4  ${
+        className={`flex justify-center sm:justify-between items-center gap-4 border-t border-[#27272A] ${
           pathname !== "/" ? "py-3" : "py-6"
         } flex-wrap w-full  `}
       >
