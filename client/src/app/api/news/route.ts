@@ -1,12 +1,9 @@
 import { NextResponse } from 'next/server';
+import { client } from '@/src/lib/anon';
 
 interface SearchRequestBody {
     keywords: string;
     result?: number;
-}
-
-interface TextResponse {
-    data: any;
 }
 
 export async function POST(req: Request): Promise<Response> {
@@ -23,25 +20,17 @@ export async function POST(req: Request): Promise<Response> {
 
         const base_url = `${process.env.ZKSEARCH_BACKEND}/api/search/news`;
 
-        const textResponse = await fetch(base_url, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                keywords: keywords,
-                max_results: result
-            })
-        });
+        const response = await client.post(base_url, {
+            keywords: keywords,
+            max_results: result
+        })
 
-        if (!textResponse.ok) {
-            throw new Error(`Error: ${textResponse.status}\n${textResponse.statusText}`);
+        if (response.status !== 200) {
+            throw new Error(`Error: ${response.status}\n${response.statusText}`);
         }
 
-        const results: TextResponse = await textResponse.json();
-
         return NextResponse.json(
-            { data: results },
+            { data: response.data },
             { status: 200, headers: { 'Content-Type': 'application/json' } }
         );
     } catch (error) {

@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { client } from '@/src/lib/anon';
 
 export async function POST(req: Request) {
     try {
@@ -13,24 +14,25 @@ export async function POST(req: Request) {
             );
         }
 
-        const base_url = 'https://api.bing.com/osjson.aspx'
+        // const base_url = 'https://api.bing.com/osjson.aspx'
+        const base_url = `${process.env.ZKSEARCH_BACKEND}/api/search/suggestion`;
 
         const params = new URLSearchParams({
-            query: query,
+            q: query,
         });
 
         const url = `${base_url}?${params.toString()}`;
+        const response = await client.get(url);
 
-        const suggestionResponse = await fetch(url);
-
-        if (!suggestionResponse.ok) {
-            throw new Error(`Error: ${suggestionResponse.status}\n${suggestionResponse.statusText}`);
+        if (response.status !== 200 || response.config.data === null) {
+            throw new Error(`Error: ${response.status}\n${response.statusText}`);
         }
 
-        const results = await suggestionResponse.json();
+        const results = response.data.map((data: any)=> data["phrase"]);
 
         return NextResponse.json(
-            { status: 200, headers: { 'Content-Type': 'application/json' }, data: results[1] }
+            { data: results },
+            { status: 200, headers: { "Content-Type": "application/json" } }
         );
     } catch (error) {
         console.error('Error fetching Suggestion data:', error);
