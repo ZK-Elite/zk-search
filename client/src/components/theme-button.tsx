@@ -14,7 +14,7 @@ export default function ThemeButton() {
                 {
                     isClient && (
                         <button className="cursor-pointer" onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")}>
-                            <div className="relative flex items-center mx-2 border-gray-500 border-2 rounded-full">
+                            <div className="relative flex items-center border-gray-500 border-2 rounded-full">
                                 <div className="w-16 h-7 bg-transparent rounded-full z-20 flex flex-row justify-between px-1.5 items-center">
                                     <Image
                                         src={"images/icons/moon.svg"}

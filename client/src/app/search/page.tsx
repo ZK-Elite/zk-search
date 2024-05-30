@@ -153,7 +153,7 @@ export default function Page() {
   return (
     <>
       <div className="flex flex-col items-center md:space-auto space-y-2 min-h-screen">
-        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row mb-[8.5rem] sm:px-9 px-5 gap-8">
+        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[14rem] flex-col xl:flex-row sm:mb-[8.5rem] mb-[2.5rem] sm:px-9 px-5 gap-8">
           <div className="flex-auto w-full xl:w-7/12">
             <div className="p-4 dark:bg-[#d3e8eba1] bg-[#121e22] rounded-2xl content-group-right-first ">
               {loading ? (
