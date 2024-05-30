@@ -40,7 +40,9 @@ export default function Page() {
       ];
       const [videoData] = await Promise.all(apiCalls);
       console.log(videoData);
-      const validVideoData = videoData.data.filter((data: any) => data.image_token);
+      const validVideoData = videoData.data.filter(
+        (data: any) => data.image_token
+      );
       setVideoResult(validVideoData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -65,9 +67,8 @@ export default function Page() {
     setMaxHeight(Math.max(...validHeights));
   }, [videoResult]);
 
-  
   const handleLoadMore = useCallback(() => {
-    if(videoResult) {
+    if (videoResult) {
       if (noOfresults + 10 <= videoResult.length) {
         setnoOfResults(noOfresults + 10);
       } else {
@@ -78,7 +79,7 @@ export default function Page() {
   return (
     <>
       <div className="flex flex-col items-center md:space-auto space-y-2 min-h-screen">
-        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[13rem] flex-col xl:flex-row sm:mb-[8.5rem] mb-[2.5rem] sm:px-9 px-5 gap-8">
+        <div className="bottom-0 w-full flex justify-center sm:mt-[10rem] mt-[14rem] flex-col xl:flex-row sm:mb-[8.5rem] mb-[2.5rem] sm:px-9 px-5 gap-8">
           <div className="w-full grid">
             <div className="p-4  rounded-2xl content-group-right-first ">
               {loading ? (
@@ -102,37 +103,39 @@ export default function Page() {
                     {videoResult &&
                       videoResult.slice(0, noOfresults).map((video, index) => {
                         return (
-                            <div key={index}>
-                              <div
-                                ref={(el) => {
-                                  if (el) videoRefs.current[index] = el;
-                                }}
-                                style={{ height: maxHeight }}
-                              >
-                                <VideoCard
-                                  content={video.content}
-                                  description={video.description}
-                                  duration={video.duration}
-                                  src={
-                                    video?.images?.large ??
-                                    video?.images?.medium
-                                  }
-                                  title={video.title}
-                                  publisher={video.publisher}
-                                />
-                              </div>
+                          <div key={index}>
+                            <div
+                              ref={(el) => {
+                                if (el) videoRefs.current[index] = el;
+                              }}
+                              style={{ height: maxHeight }}
+                            >
+                              <VideoCard
+                                content={video.content}
+                                description={video.description}
+                                duration={video.duration}
+                                src={
+                                  video?.images?.large ?? video?.images?.medium
+                                }
+                                title={video.title}
+                                publisher={video.publisher}
+                              />
                             </div>
+                          </div>
                         );
                       })}
                   </Tile>
 
-                  {(videoResult && noOfresults < videoResult.length) && <div className="w-full flex justify-center items-center mt-10">
-                    <button className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 w-[310px] max-sm:w-11/12"
-                      onClick={handleLoadMore}
-                    >
-                      Load More
-                    </button>
-                  </div>}
+                  {videoResult && noOfresults < videoResult.length && (
+                    <div className="w-full flex justify-center items-center mt-12">
+                      <button
+                        className="flex flex-row justify-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5 w-[310px] max-sm:w-11/12 mt-2"
+                        onClick={handleLoadMore}
+                      >
+                        Load More
+                      </button>
+                    </div>
+                  )}
                 </>
               )}
             </div>

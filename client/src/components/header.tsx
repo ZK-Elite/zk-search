@@ -25,24 +25,39 @@ const Header = () => {
     <div
       className={`fixed px-5 w-full z-40 ${
         pathname !== "/" &&
-        "backdrop-blur-xl bg-[#00111A] dark:bg-[#E5FCFF] border-b border-[#27272A]"
+        "backdrop-blur-xl bg-[#00111A] dark:bg-[#E5FCFF]"
       }`}
     >
       <div className={`flex w-full md:px-4 pt-6 items-center`}>
-        {pathname !== "/" && (
-          <div className="flex space-x-3 w-full">
-            <Link href="/" rel="noopener noreferrer">
-              <Image
-                width={30}
-                height={30}
-                src="/logo.svg"
-                alt="Zksearch-Logo"
-                className="w-12 aspect-square"
-                priority
-              />
-            </Link>
-            <div className="flex flex-col gap-7" onClick={changeState}>
+        <div className="w-full items-center border-b border-[#27272A]">
+          {pathname !== "/" ? (
+          <>
+            <div className="flex items-center gap-7 justify-between">
+              <Link href="/" rel="noopener noreferrer">
+                <Image
+                  width={30}
+                  height={30}
+                  src="/logo.svg"
+                  alt="Zksearch-Logo"
+                  className="w-12 aspect-square"
+                  priority
+                />
+              </Link>
+              <div className="hidden sm:block">
+                <SearchBox />
+              </div>
+              <div
+                className={`ml-auto ${
+                  pathname === "/" && "mt-3.5"
+                } cursor-pointer bg-opacity-90`}
+                >
+                <ThemeButton />
+              </div>
+            </div>
+            <div className="sm:hidden block mt-4">
               <SearchBox />
+            </div>
+            <div className="flex flex-col mt-5 sm:pl-20" onClick={changeState}>
               <div className="flex flex-row gap-7 sm:justify-start justify-between">
                 {buttonTabs.map((item, index) => (
                   <Link
@@ -66,21 +81,23 @@ const Header = () => {
                       alt="image"
                       priority
                     />
-                    <span className="text-base hidden sm:flex font-medium">
+                    <span className="text-base flex font-medium">
                       {item.title}
                     </span>
                   </Link>
                 ))}
               </div>
             </div>
+          </>
+          ):
+          <div
+            className={`flex justify-end ${
+              pathname === "/" && "mt-3.5"
+            } cursor-pointer bg-opacity-90`}
+            >
+            <ThemeButton />
           </div>
-        )}
-        <div
-          className={`ml-auto ${
-            pathname === "/" && "mt-3.5"
-          } cursor-pointer bg-opacity-90`}
-        >
-          <ThemeButton />
+          }
         </div>
       </div>
     </div>
