@@ -39,7 +39,6 @@ export default function Page() {
         }),
       ];
       const [videoData] = await Promise.all(apiCalls);
-      console.log(videoData);
       const validVideoData = videoData.data.filter(
         (data: any) => data.image_token
       );

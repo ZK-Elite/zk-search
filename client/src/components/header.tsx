@@ -20,7 +20,7 @@ const Header = () => {
   const changeState = () => {
     setLayout(!layout);
   };
-  console.log(pathname, pathname.split("/")[1]);
+
   return (
     <div
       className={`fixed px-5 w-full z-40 ${

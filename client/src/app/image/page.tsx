@@ -34,11 +34,8 @@ export default function Page() {
           result: 50
         }),
       }).then((imageData) => {
-        console.log(imageData.data)
-
         setImageResult(imageData.data)
       }).catch((err) => {
-        console.log("error")
       });
 
     } catch (error) {

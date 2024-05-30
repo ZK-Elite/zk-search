@@ -24,7 +24,7 @@ export async function POST(req: Request) {
         const url = `${base_url}?${params.toString()}`;
         const response = await client.get(url);
 
-        if (response.status !== 200 || response.config.data === null) {
+        if (response.status !== 200 || response.data === null) {
             throw new Error(`Error: ${response.status}\n${response.statusText}`);
         }
 

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import axios from "axios";
+import { client } from "@/src/lib/anon";
 import Groq from "groq-sdk";
 
 export async function POST(req: Request) {
@@ -31,7 +31,7 @@ async function ChatByVenice(q: string) {
   try {
     const date = new Date();
     const formattedDate = date.toISOString().split("T")[0].replace(/-/g, "");
-    const veniceResponse = await axios.post(
+    const veniceResponse = await client.post(
       "https://venice.ai/api/inference/chat",
       {
         prompt: [
