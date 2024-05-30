@@ -135,7 +135,7 @@ export default function Page() {
     }
   }, [fetchData, query]);
 
-  const fetchAds = useCallback(async()=> {
+  const fetchAds = useCallback(async () => {
     const adsData = await fetch("/api/ads/fetch", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
@@ -155,7 +155,7 @@ export default function Page() {
   useEffect(() => {
     const interval = setInterval(() => {
       setAdIndex((prevIndex) => (ad.length > 0 ? (prevIndex + 1) % ad.length : 0));
-    }, 5000); // Change ad every 10 seconds
+    }, 10000); // Change ad every 10 seconds
 
     return () => clearInterval(interval); // Cleanup interval on component unmount
   }, [ad]);
@@ -202,21 +202,27 @@ export default function Page() {
                     </ScrollArea>
                   ) : (
                     <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[400px] flex justify-center items-center ">
-                      <Image
-                        src={"/images/icons/Not-Found-White.svg"}
-                        alt="not-found"
-                        width={42}
-                        height={42}
-                        className="dark:hidden block"
-                      />{" "}
-                      <Image
-                        src={"/images/icons/Not-Found-Black.svg"}
-                        alt="not-found"
-                        width={42}
-                        height={42}
-                        className="hidden dark:block "
-                      />{" "}
+                      <div>
+                        <div className="flex justify-center">
+                        <Image
+                          src={"/images/icons/Not-Found-White.svg"}
+                          alt="not-found"
+                          width={42}
+                          height={42}
+                          className="dark:hidden block"
+                        />{" "}
+                        <Image
+                          src={"/images/icons/Not-Found-Black.svg"}
+                          alt="not-found"
+                          width={42}
+                          height={42}
+                          className="hidden dark:block "
+                        />{" "}
+                      </div>
+
                       No results found
+                      </div>
+                      
                     </div>
                   )}
 
@@ -226,59 +232,65 @@ export default function Page() {
                     <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">
                       Videos
                     </p>
-                    <Carousel>
-                      <CarouselContent>
-                        {videoResult ? (
-                          videoResult.map((video, index) => {
-                            return (
-                              video.image_token && (
-                                <CarouselItem
-                                  className="md:basis-1/2 lg:basis-[31%] items-stretch"
-                                  key={index}
-                                >
-                                  <VideoCard
-                                    content={video.content}
-                                    description={video.description}
-                                    duration={video.duration}
-                                    src={video.images.large}
-                                    title={video.title}
-                                    publisher={video.publisher}
-                                  />
-                                </CarouselItem>
-                              )
-                            );
-                          })
-                        ) : (
-                          <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
-                            <Image
-                              src={"/images/icons/Not-Found-White.svg"}
-                              alt="not-found"
-                              width={42}
-                              height={42}
-                              className="dark:hidden block"
-                            />{" "}
-                            <Image
-                              src={"/images/icons/Not-Found-Black.svg"}
-                              alt="not-found"
-                              width={42}
-                              height={42}
-                              className="hidden dark:block "
-                            />{" "}
-                            No results found
-                          </div>
-                        )}
-                      </CarouselContent>
-                      <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
-                    </Carousel>
-                    <div className="w-full flex justify-center items-center mt-3">
-                      <Link
-                        href={`/videos?q=${encodeURI(query ?? "")}`}
-                        className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5"
-                      >
-                        More Videos
-                        <ChevronRight className="h-6 w-6" />
-                      </Link>
-                    </div>
+                    {
+                      videoResult ? (<>
+                        <Carousel>
+                          <CarouselContent>
+                            {videoResult && videoResult.map((video, index) => {
+                              return (
+                                video.image_token && (
+                                  <CarouselItem
+                                    className="md:basis-1/2 lg:basis-[31%] items-stretch"
+                                    key={index}
+                                  >
+                                    <VideoCard
+                                      content={video.content}
+                                      description={video.description}
+                                      duration={video.duration}
+                                      src={video.images.large}
+                                      title={video.title}
+                                      publisher={video.publisher}
+                                    />
+                                  </CarouselItem>
+                                )
+                              );
+                            })
+                            }
+                          </CarouselContent>
+                          <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
+                        </Carousel>
+                        <div className="w-full flex justify-center items-center mt-3">
+                          <Link
+                            href={`/videos?q=${encodeURI(query ?? "")}`}
+                            className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5"
+                          >
+                            More Videos
+                            <ChevronRight className="h-6 w-6" />
+                          </Link>
+                        </div>
+                      </>) : (<div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
+                        <div>
+                          <div className="flex justify-center">
+                          <Image
+                            src={"/images/icons/Not-Found-White.svg"}
+                            alt="not-found"
+                            width={42}
+                            height={42}
+                            className="dark:hidden block"
+                          />{" "}
+                          <Image
+                            src={"/images/icons/Not-Found-Black.svg"}
+                            alt="not-found"
+                            width={42}
+                            height={42}
+                            className="hidden dark:block "
+                          />{" "}
+                        </div>
+                        No results found
+                        </div>
+                      </div>)
+                    }
+
                   </div>
 
                   {/* ---------------- News ---------------- */}
@@ -287,10 +299,10 @@ export default function Page() {
                     <p className="mb-4 text-xl text-white dark:text-black font-bold leading-6">
                       News
                     </p>
-                    <Carousel>
-                      <CarouselContent>
-                        {newsResult ? (
-                          newsResult.map((news, index) => {
+                    {
+                      newsResult ? (<><Carousel>
+                        <CarouselContent>
+                          {newsResult && newsResult.map((news, index) => {
                             return (
                               news.title &&
                               news.image && (
@@ -309,37 +321,42 @@ export default function Page() {
                               )
                             );
                           })
-                        ) : (
-                          <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
+                          }
+                        </CarouselContent>
+                        <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
+                      </Carousel>
+                        <div className="w-full flex justify-center items-center mt-3">
+                          <Link
+                            href={`/news?q=${encodeURI(query ?? "")}`}
+                            className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5"
+                          >
+                            More News
+                            <ChevronRight className="h-6 w-6" />
+                          </Link>
+                        </div>
+                      </>) : (<div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
+                        <div>
+                          <div className="flex justify-center">
                             <Image
-                              src={"/images/icons/Not-Found-White.svg"}
-                              alt="not-found"
-                              width={42}
-                              height={42}
-                              className="dark:hidden block"
-                            />{" "}
-                            <Image
-                              src={"/images/icons/Not-Found-Black.svg"}
-                              alt="not-found"
-                              width={42}
-                              height={42}
-                              className="hidden dark:block "
-                            />{" "}
-                            No results found
+                          src={"/images/icons/Not-Found-White.svg"}
+                          alt="not-found"
+                          width={42}
+                          height={42}
+                          className="dark:hidden block"
+                        />{" "}
+                        <Image
+                          src={"/images/icons/Not-Found-Black.svg"}
+                          alt="not-found"
+                          width={42}
+                          height={42}
+                          className="hidden dark:block "
+                        />{" "}
                           </div>
-                        )}
-                      </CarouselContent>
-                      <CarouselNext className="text-black dark:text-white dark:bg-[#d3e8eba1] bg-white border border-[#B3B3B3]" />
-                    </Carousel>
-                    <div className="w-full flex justify-center items-center mt-3">
-                      <Link
-                        href={`/news?q=${encodeURI(query ?? "")}`}
-                        className="flex flex-row items-center gap-2 bg-[#20292d] dark:bg-[#d3e8eb] text-white dark:text-black rounded-full py-3 px-5"
-                      >
-                        More News
-                        <ChevronRight className="h-6 w-6" />
-                      </Link>
-                    </div>
+                          No results found
+                        </div>
+                      </div>)
+                    }
+
                   </div>
 
                   {/* --------------- relevant links --------------- */}
@@ -356,7 +373,9 @@ export default function Page() {
                     </ScrollArea>
                   ) : (
                     <div className="w-full opacity-40 gap-4 font-medium text-xl text-white dark:text-black min-h-[200px] flex justify-center items-center ">
-                      <Image
+                      <div>
+                        <div className="flex justify-center">
+                          <Image
                         src={"/images/icons/Not-Found-White.svg"}
                         alt="not-found"
                         width={42}
@@ -370,7 +389,9 @@ export default function Page() {
                         height={42}
                         className="hidden dark:block "
                       />{" "}
-                      No results found
+                        </div>
+                        No results found
+                      </div>
                     </div>
                   )}
                 </>
