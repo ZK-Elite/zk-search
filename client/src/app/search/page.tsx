@@ -424,11 +424,11 @@ export default function Page() {
               )}
             </div>
             {imageResult && (
-              <div className="dark:bg-[#d3e8eba1] bg-[#121e22] max-md:pr-9 mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden ">
+              <div className="dark:bg-[#d3e8eba1] bg-[#121e22] mb-4 mt-0 max-md:mt-3 rounded-2xl p-4 content-group-right-first content-group-right1 overflow-hidden ">
                 <p className="mt-2 mb-4 text-xl text-white dark:text-black font-bold leading-6">
                   Images
                 </p>
-                <div className="content-group-video max-md:p-2">
+                <div className="content-group-video">
                   {loading ? (
                     <div className="flex flex-row justify-around">
                       <Skeleton className="h-[15vh] w-[10vw]" />
@@ -438,7 +438,7 @@ export default function Page() {
                   ) : (
                     <>
                       <div>
-                        <div className="grid grid-cols-5 gap-2">
+                        <div className="grid sm:grid-cols-5 grid-cols-3 gap-2">
                           {imageResult.slice(0, 11).map((image, index) => {
                             return (
                               image.image && (
